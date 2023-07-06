@@ -25,7 +25,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ZOOM_CLONE_WEB_RTC }}'
           channelId: live
           projectId: zoom-clone-web-rtc
-          targets: backend
+          target: backend
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
   deploy-frontend:
@@ -46,6 +46,6 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ZOOM_CLONE_WEB_RTC }}'
           channelId: live
           projectId: zoom-clone-web-rtc
-          targets: frontend
+          target: frontend
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
