@@ -18,6 +18,21 @@
           "destination": "/index.html"
         }
       ]
+    },
+    {
+      "target": "backend",
+      "public": "backend/dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "function": "api"
+        }
+      ]
     }
   ],
   "functions": [
