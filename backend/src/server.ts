@@ -34,7 +34,3 @@ function onListening() {
     typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
   console.log(`Listening on ${bind}`);
 }
-
-export const app = (): typeof server => {
-  return server;
-};
