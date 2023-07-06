@@ -3,18 +3,16 @@
     "default": "zoom-clone-web-rtc"
   },
   "targets": {
-  "zoom-clone-web-rtc": {
-        "backend": {
-          "hosting": {
-            "public": "backend/dist"
-          }
-        },
-        "frontend": {
-          "hosting": {
-            "public": "frontend/build"
-          }
-        }
+    "zoom-clone-web-rtc": {
+      "hosting": {
+        "frontend": [
+          "zoom-clone-web-rtc"
+        ],
+        "backend": [
+          "zoom-clone-web-rtc"
+        ]
       }
+    }
   },
   "etags": {}
 }
