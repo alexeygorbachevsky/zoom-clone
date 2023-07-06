@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "zoom-clone-web-rtc"
-  }
+  },
+  "targets": {
+    "zoom-clone-web-rtc": {
+      "hosting": {
+       "backend": [
+         "zoom-clone-web-rtc"
+       ],
+        "frontend": [
+          "zoom-clone-web-rtc"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
