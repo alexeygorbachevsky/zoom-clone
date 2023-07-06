@@ -26,6 +26,8 @@ jobs:
           channelId: live
           projectId: zoom-clone-web-rtc
           targets: backend
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
   deploy-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -45,3 +47,5 @@ jobs:
           channelId: live
           projectId: zoom-clone-web-rtc
           targets: backend
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks  
