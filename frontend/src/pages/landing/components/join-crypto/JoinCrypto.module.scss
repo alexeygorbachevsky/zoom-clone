@@ -1,0 +1,10 @@
+@use "sass:map";
+
+@import "../../../../css/constants";
+
+
+.wrapper {
+  height: 728px;
+  background-color: map.get($background-color, "primary-blue");
+  //transform: rotate(90deg);
+}

@@ -1,0 +1,11 @@
+{
+    "name": "zoom-clone",
+    "version": "0.1.0",
+    "description": "Zoom clone built on Web RTC",
+    "scripts": {
+        "start": "npm run serve",
+        "build": "npm run build-ts"
+    },
+    "author": "",
+    "license": "ISC"
+}
