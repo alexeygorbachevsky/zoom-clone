@@ -21,7 +21,7 @@ jobs:
           cd backend
           npm install
           npm run build
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
   deploy-frontend:
     runs-on: ubuntu-latest
     env:
@@ -37,5 +37,5 @@ jobs:
           cd frontend
           npm install
           npm run build
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
           
