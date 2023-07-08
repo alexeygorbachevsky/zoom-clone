@@ -20,7 +20,6 @@ jobs:
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           cd backend
           npm install
-          npm run build
           vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
   deploy-frontend:
     runs-on: ubuntu-latest
