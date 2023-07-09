@@ -1,5 +1,1 @@
-import type { RootState, AppDispatch } from "./types";
-
-import { default as store } from "./store";
-
-export { store, RootState, AppDispatch };
+export { default as store, RootStoreContext} from "./rootStore";

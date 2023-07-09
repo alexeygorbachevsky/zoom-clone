@@ -40,6 +40,15 @@ dotenvFiles.forEach(dotenvFile => {
   }
 });
 
+const PUSHER_KEY = process.env.PUSHER_KEY;
+const PUSHER_CLUSTER = process.env.PUSHER_CLUSTER;
+
+if (!PUSHER_KEY || !PUSHER_CLUSTER) {
+  throw new Error(
+      "The PUSHER_KEY and PUSHER_CLUSTER environment variable is required but was not specified.",
+  );
+}
+
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
 // https://github.com/facebook/create-react-app/issues/253.
@@ -88,6 +97,8 @@ function getClientEnvironment(publicUrl) {
         // Whether or not react-refresh is enabled.
         // It is defined here so it is available in the webpackHotDevClient.
         FAST_REFRESH: process.env.FAST_REFRESH !== "false",
+        PUSHER_KEY: process.env.PUSHER_KEY,
+        PUSHER_CLUSTER: process.env.PUSHER_CLUSTER,
       },
     );
   // Stringify all values so we can feed into webpack DefinePlugin

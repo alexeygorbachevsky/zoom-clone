@@ -1,9 +1,2 @@
-import { Request, Response } from "express";
-
-/**
- * GET /
- * Home page.
- */
-export const index = async (req: Request, res: Response): Promise<void> => {
-    res.json({ title: "Express" });
-};
+export { pusherAuthController } from "./pusherAuthController";
+export { defaultController } from "./default";

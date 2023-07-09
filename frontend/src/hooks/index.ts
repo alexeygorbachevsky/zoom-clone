@@ -1,3 +1,3 @@
-import { useDispatch, useSelector } from "./redux";
+import { default as useMobX } from "./use-mobx";
 
-export { useDispatch, useSelector };
+export { useMobX };

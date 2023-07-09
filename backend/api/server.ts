@@ -1,36 +1,20 @@
 import { app as expressApp } from "./app";
-
+import * as https from "https";
+import * as fs from "fs";
 
 const port = expressApp.get("port");
 
-export const server = expressApp.listen(port, onListening);
-server.on("error", onError);
+const options = {
+  key: fs.readFileSync(".cert/key.pem"),
+  cert: fs.readFileSync(".cert/cert.pem"),
+};
 
-function onError(error: NodeJS.ErrnoException) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
+export const server = https.createServer(options, expressApp);
 
-  const bind = typeof port === "string" ? `Pipe ${port}` : `Port ${port}`;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case "EACCES":
-      console.error(`${bind} requires elevated privileges`);
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(`${bind} is already in use`);
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
+server.listen(port, onListening);
 
 function onListening() {
   const addr = server.address();
-  const bind =
-    typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+  const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
   console.log(`Listening on ${bind}`);
 }

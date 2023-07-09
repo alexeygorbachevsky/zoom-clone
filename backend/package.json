@@ -1,12 +1,13 @@
 {
   "name": "zoom-clone-backend",
-  "version": "1.2.0",
+  "version": "0.1.0",
   "description": "Zoom clone backend",
   "scripts": {
     "build": "npm run build-ts",
+    "start": "nodemon api/server.ts",
+    "start-build": "npm run serve",
     "vercel-build": "echo hello",
     "build:watch": "tsc --watch",
-    "start": "npm run serve",
     "serve": "node dist/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "watch-node": "nodemon dist/server.js",
@@ -34,9 +35,14 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.16.2",
     "http-errors": "^1.7.1",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "pusher": "^5.1.3",
+    "redis": "^4.6.7",
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -44,6 +50,7 @@
     "@types/http-errors": "1.8.2",
     "@types/morgan": "1.9.4",
     "@types/node": "14.18.53",
+    "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "concurrently": "6.5.1",

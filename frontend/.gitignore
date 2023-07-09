@@ -19,6 +19,7 @@
 .env.production.local
 .idea
 .vscode
+.cert
 
 npm-debug.log*
 yarn-debug.log*

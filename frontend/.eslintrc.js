@@ -12,6 +12,7 @@ module.exports = {
   ],
   rules: {
     // OFF
+    "@typescript-eslint/no-non-null-assertion": 0,
     "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
     "jsx-a11y/label-has-for": 0,

@@ -1,20 +1,19 @@
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
 
 import { ErrorBoundary } from "components";
 
-import { store } from "store";
+import { store, RootStoreContext, } from "store";
 
 import { Routing } from "./components";
 
 const App = () => (
-  <Provider store={store}>
+    <RootStoreContext.Provider value={store}>
     <ErrorBoundary>
       <BrowserRouter>
         <Routing />
       </BrowserRouter>
     </ErrorBoundary>
-  </Provider>
+  </RootStoreContext.Provider>
 );
 
 export default App;

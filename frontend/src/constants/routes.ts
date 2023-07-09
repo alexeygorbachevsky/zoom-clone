@@ -1,4 +1,4 @@
 export const ROUTES = {
-  home: "/",
-  markets: "markets",
+  main: "/",
+  room: "room",
 };
