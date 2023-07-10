@@ -22,6 +22,7 @@ jobs:
       - run: |
           npm install --global vercel@latest
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          cd backend
           npm install
           vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
   deploy-frontend:
@@ -36,6 +37,7 @@ jobs:
       - run: |
           npm install --global vercel@latest
           vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          cd frontend
           npm install
           npm run build
           vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
