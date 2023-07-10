@@ -52,7 +52,7 @@ This is mostly identical to the "Node.js: Attach by Process ID" template with on
 We added `"protocol": "inspector"` which tells VS Code that we're using the latest version of Node which uses a new debug protocol.
 
 With this file in place, you can hit `F5` to attach a debugger.
-You will probably have multiple node processes running, so you need to find the one that shows `node dist/server.js`.
+You will probably have multiple node processes running, so you need to find the one that shows `node dist/_server.js`.
 Now just set your breakpoints and go!
 
 ---

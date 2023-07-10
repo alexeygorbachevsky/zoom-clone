@@ -9,12 +9,12 @@ const options = {
   cert: fs.readFileSync(".cert/cert.pem"),
 };
 
-export const server = https.createServer(options, expressApp);
+export const _server = https.createServer(options, expressApp);
 
-server.listen(port, onListening);
+_server.listen(port, onListening);
 
 function onListening() {
-  const addr = server.address();
+  const addr = _server.address();
   const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
   console.log(`Listening on ${bind}`);
 }

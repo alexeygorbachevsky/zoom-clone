@@ -3,7 +3,7 @@ import createError from "http-errors";
 
 declare type WebError = Error & { status?: number };
 
-export const errorHandler = (
+export const _errorHandler = (
   err: WebError,
   req: Request,
   res: Response,

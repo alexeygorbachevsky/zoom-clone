@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import Pusher from "pusher";
-
-import { EVENTS } from "../constants/web-rtc";
-import { createRoom } from "../db";
 import createError from "http-errors";
+
+import { EVENTS } from "../constants/_web-rtc";
+import { _createRoom } from "../redis/_index";
 
 // ngrok http 5001
 // taskkill /f /im ngrok.exe
@@ -27,7 +27,7 @@ export const pusherAuthController = async (
   const callback = query.callback as string;
   const action = query.action as string;
 
-  const newRoomId = await createRoom(socketId);
+  const newRoomId = await _createRoom(socketId);
 
   if (!newRoomId) {
     next(createError(500, { message: "Room creation error" }));

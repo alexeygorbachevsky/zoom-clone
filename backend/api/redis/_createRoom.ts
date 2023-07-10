@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-import { redisClient } from "../redis";
+import { redisClient } from "./_index";
 
 const getNewRoomId = async () => {
   const newRoomId = uuid();
@@ -15,7 +15,7 @@ const getNewRoomId = async () => {
   return newRoomId;
 };
 
-export const createRoom = async (socketId: string): Promise<string | null> => {
+export const _createRoom = async (socketId: string): Promise<string | null> => {
   try {
     // clear all
     // await redisClient.flushDb();
@@ -27,14 +27,28 @@ export const createRoom = async (socketId: string): Promise<string | null> => {
     // await redisClient.set("room", JSON.stringify({ 1: "1" }));
     // await redisClient.set("room", "2");
 
+    // TODO:
+    // redisClient.sAdd(roomId, socketId)
+
+    // remove user from key room member
+    // redisClient.srem(roomId, userId);
+
+    // redisClient.smembers
+    // const isMember = redisClient.sismember(roomId, dest)
+
     await redisClient.hSet("rooms", newRoomId, JSON.stringify([socketId]));
 
     const allRooms = await redisClient.hGetAll("rooms");
-
     console.log("allRooms", allRooms);
 
     const targetRoom = "fc7f01e0-ed0c-4260-a1d3-758c1c0aaf77";
-    const roomMembers = JSON.parse(allRooms[targetRoom] || "[]");
+    const room = await redisClient.hGet("rooms", targetRoom);
+
+    if (!room) {
+      // TODO:
+    }
+
+    const roomMembers = JSON.parse(room);
 
     console.log("roomMembers", roomMembers);
 

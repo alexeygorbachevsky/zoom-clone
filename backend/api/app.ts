@@ -5,10 +5,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { errorHandler } from "./middlewares";
-import { defaultRoute, pusherAuthRoute } from "./routes";
-import { connectRedis } from "./redis";
-import { isDev } from "./constants/env";
+import { _errorHandler } from "./middlewares/_errorHandler";
+import { defaultRoute } from "./routes/_default";
+import { pusherAuthRoute } from "./routes/_pusherAuth";
+import { connectRedis } from "./redis/_index";
+import { isDev } from "./constants/_env";
 
 // Create Express server
 export const app = express();
@@ -23,7 +24,7 @@ app.use(logger("dev"));
 app.use("/", defaultRoute);
 app.use("/pusher/auth", pusherAuthRoute);
 
-app.use(errorHandler);
+app.use(_errorHandler);
 
 process.on("unhandledRejection", (error: Error) => {
   if (isDev) {

@@ -1,6 +1,8 @@
 import { createClient } from "redis";
 import * as process from "process";
 
+export { _createRoom } from "./_createRoom";
+
 export const redisClient = createClient({
   password: process.env.REDIS_PASSWORD,
   socket: {
