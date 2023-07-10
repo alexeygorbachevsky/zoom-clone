@@ -31,22 +31,26 @@ const MainPage = () => {
 
     setPusher(authPusher);
 
-    authPusher.connection.bind("connected", (data: any) => {
+    authPusher.connection.bind("connected", (data: never) => {
+      // eslint-disable-next-line no-console
       console.log("Connected", JSON.stringify(data));
 
       const channel = authPusher.subscribe(CHANNEL);
 
       channel.bind(EVENTS.ROOM_CREATED, (roomId: string) => {
+        // eslint-disable-next-line no-console
         console.log("roomId", roomId);
         // navigate(`${ROUTES.room}/${roomId}`);
       });
     });
 
     authPusher.connection.bind("error", (err: Error) => {
+      // eslint-disable-next-line no-console
       console.log("Error", err);
     });
   };
 
+  // eslint-disable-next-line
   const sendEvent = () => {
     if (!pusher) {
       return;
@@ -61,11 +65,9 @@ const MainPage = () => {
     );
   };
 
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       pusher?.disconnect();
-    };
-  }, []);
+    }, []);
 
   return (
     <div className={wrapper}>

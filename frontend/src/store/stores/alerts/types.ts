@@ -1,5 +1,7 @@
 export enum AlertTypes {
+    // eslint-disable-next-line
     success = "success",
+    // eslint-disable-next-line
     error = "error",
 }
 
