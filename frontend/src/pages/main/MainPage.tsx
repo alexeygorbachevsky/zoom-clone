@@ -1,62 +1,41 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
 // import { useNavigate } from "react-router-dom";
-import Pusher from "pusher-js";
 
 import {
   CHANNEL,
-  EVENTS,
   ICE_CANDIDATE_EXCHANGE_EVENT,
 } from "constants/web-rtc";
+
+import { useMobX } from "hooks";
+
+import { createRoom, joinRoom } from "./helpers";
 
 import styles from "./MainPage.module.scss";
 
 const { wrapper } = styles;
 
-const MainPage = () => {
-  const [pusher, setPusher] = useState<Pusher | null>(null);
+const MainPage = observer(() => {
+  const [joiningRoomId, setJoiningRoomId] = useState("");
+  const { main } = useMobX();
+  const { pusher } = main;
   // const navigate = useNavigate();
 
-  const createRoom = () => {
-    const authPusher = new Pusher(process.env.PUSHER_KEY!, {
-      channelAuthorization: {
-        endpoint: "https://localhost:5001/pusher/auth",
-        transport: "jsonp",
-        params: {
-          action: "create-room",
-        },
-      },
-      cluster: process.env.PUSHER_CLUSTER!,
-      forceTLS: true,
-    });
+  const onCreateRoom = useCallback(() => {
+    createRoom({ main });
+  }, [main]);
 
-    setPusher(authPusher);
+  const onJoinRoom = useCallback(() => {
+    joinRoom({ main, roomId: joiningRoomId });
+  }, [main, joiningRoomId]);
 
-    authPusher.connection.bind("connected", (data: never) => {
-      // eslint-disable-next-line no-console
-      console.log("Connected", JSON.stringify(data));
-
-      const channel = authPusher.subscribe(CHANNEL);
-
-      channel.bind(EVENTS.ROOM_CREATED, (roomId: string) => {
-        // eslint-disable-next-line no-console
-        console.log("roomId", roomId);
-        // navigate(`${ROUTES.room}/${roomId}`);
-      });
-    });
-
-    authPusher.connection.bind("error", (err: Error) => {
-      // eslint-disable-next-line no-console
-      console.log("Error", err);
-    });
+  const onChangeJoinRoomInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setJoiningRoomId(e.target.value);
   };
 
   // eslint-disable-next-line
   const sendEvent = () => {
-    if (!pusher) {
-      return;
-    }
-
-    pusher.send_event(
+    pusher?.send_event(
       ICE_CANDIDATE_EXCHANGE_EVENT,
       {
         message: "hello buddies",
@@ -65,15 +44,20 @@ const MainPage = () => {
     );
   };
 
-  useEffect(() => () => {
+  useEffect(
+    () => () => {
       pusher?.disconnect();
-    }, []);
+    },
+    [],
+  );
 
   return (
     <div className={wrapper}>
-      <button onClick={createRoom}>Create room</button>
+      <button onClick={onCreateRoom}>Create room</button>
+      <input value={joiningRoomId} onChange={onChangeJoinRoomInput} />
+      <button onClick={onJoinRoom}>Join room</button>
     </div>
   );
-};
+});
 
 export default MainPage;

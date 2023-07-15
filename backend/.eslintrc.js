@@ -16,6 +16,7 @@ module.exports = {
     },
 
     "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": 0,
         "max-len": ["warn", { "code": 120 }],
         "comma-dangle": ["error", "always-multiline"],
         "@typescript-eslint/semi": ["error"],

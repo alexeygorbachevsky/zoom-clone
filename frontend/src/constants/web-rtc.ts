@@ -17,4 +17,5 @@ export const ACTIONS = {
 
 export const EVENTS = {
   ROOM_CREATED: "room-created",
+  ROOM_JOINED: "room-joined",
 };

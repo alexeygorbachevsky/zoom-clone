@@ -1,12 +1,14 @@
 import { createContext } from "react";
 import { configure } from "mobx";
 
-import { AlertsStore } from "./stores";
+import { AlertsStore, MainStore } from "./stores";
 
 class RootStore {
+  main: MainStore;
   alerts: AlertsStore;
 
   constructor() {
+    this.main = new MainStore(this);
     this.alerts = new AlertsStore(this);
   }
 
@@ -23,7 +25,7 @@ class RootStore {
   }
 }
 
-// RootStore.configure();
+RootStore.configure();
 
 const rootStore = new RootStore();
 

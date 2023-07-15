@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 
-declare type WebError = Error & { status?: number };
+import { WebError } from "../constants/_types";
 
 export const _errorHandler = (
   err: WebError,
