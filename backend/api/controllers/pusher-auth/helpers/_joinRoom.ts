@@ -16,7 +16,7 @@ const joinRoom = async ({
     );
     error.status = 400;
 
-    return error;
+    throw error;
   }
 
   const isJoined = await joinRoomDB(roomId, socketId);
@@ -27,10 +27,8 @@ const joinRoom = async ({
     );
     error.status = 404;
 
-    return error;
+    throw error;
   }
-
-  return null;
 };
 
 export default joinRoom;

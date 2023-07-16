@@ -38,7 +38,3 @@ export const connectRedis = async (): Promise<typeof redisClient> => {
 export const disconnectRedis = async (): Promise<void> => {
   await redisClient.disconnect();
 };
-
-export const clearDB = async () => {
-  await redisClient.flushDb();
-};

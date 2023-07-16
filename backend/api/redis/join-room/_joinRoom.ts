@@ -65,6 +65,8 @@ const joinRoom = async (roomId: string, socketId: string): Promise<boolean> => {
     // console.log("isDeleted", isDeleted);
   } catch (err) {
     console.log("Error", err);
+
+    throw err;
   }
 
   await disconnectRedis();
