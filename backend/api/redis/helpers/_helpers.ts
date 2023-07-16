@@ -12,11 +12,7 @@ export const redisClient = createClient({
 });
 
 export const connectRedis = async (): Promise<typeof redisClient> => {
-  try {
-    await redisClient.connect();
-  } catch (err) {
-    console.log("Error", err);
-  }
+  await redisClient.connect();
 
   if (isDev) {
     redisClient.on("connect", () => {
