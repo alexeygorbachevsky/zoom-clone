@@ -17,7 +17,7 @@ const fetchPusherAuthToken = async (params: Params) => {
     params,
   );
 
-  return response.data.auth;
+  return response.data;
 };
 
 export default fetchPusherAuthToken;

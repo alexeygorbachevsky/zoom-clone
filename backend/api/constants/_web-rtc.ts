@@ -1,4 +1,4 @@
-export const CHANNEL = "private-zoom-clone";
+export const CHANNEL = "presence-zoom-clone";
 
 export const ICE_CANDIDATE_EXCHANGE_EVENT = "client-ice-candidate-exchange";
 

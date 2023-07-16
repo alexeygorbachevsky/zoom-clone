@@ -21,8 +21,6 @@ export const pusherAuth = async (
 
   const args = {
     socketId,
-    channel,
-    pusher,
   };
 
   let error = null;
@@ -42,7 +40,12 @@ export const pusherAuth = async (
   }
 
   // This authenticates every user
-  const authResponse = pusher.authorizeChannel(socketId, channel);
+  const authResponse = pusher.authorizeChannel(socketId, channel, {
+    user_id: socketId,
+    user_info: {
+      doneAction: action,
+    },
+  });
 
   res.send(authResponse);
 };

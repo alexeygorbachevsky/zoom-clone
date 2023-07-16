@@ -12,14 +12,14 @@ const getAuthPusher = ({ action, roomId }: Args) =>
     authorizer: channel => ({
       authorize: async (socketId, callback) => {
         try {
-          const auth = await fetchPusherAuthToken({
+          const result = await fetchPusherAuthToken({
             socketId,
             action,
             channelName: channel.name,
             roomId,
           });
 
-          callback(null, { auth });
+          callback(null, result);
         } catch (err) {
           // TODO:
           // eslint-disable-next-line no-console

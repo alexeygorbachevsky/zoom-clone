@@ -34,6 +34,13 @@ const joinRoom = ({
         // navigate(`${ROUTES.room}/${roomId}`);
       });
 
+      channel.bind("pusher:subscription_succeeded", (data: never) => {
+        // var wasTriggered = pusher.trigger('client-event', {some: 'data'});
+
+        // eslint-disable-next-line no-console
+        console.log("pusher:subscription_succeeded", data);
+      });
+
       channel.bind("pusher:subscription_error", () => {
         // eslint-disable-next-line no-console
         console.log("Joining error");

@@ -25,6 +25,13 @@ const createRoom = ({ main }: { main: MainStore }) => {
       // navigate(`${ROUTES.room}/${roomId}`);
     });
 
+    channel.bind("pusher:subscription_succeeded", (data: never) => {
+      // var wasTriggered = pusher.trigger('client-event', {some: 'data'});
+
+      // eslint-disable-next-line no-console
+      console.log("pusher:subscription_succeeded", data);
+    });
+
     channel.bind("pusher:subscription_error", () => {
       // eslint-disable-next-line no-console
       console.log("Creating error");
@@ -33,7 +40,7 @@ const createRoom = ({ main }: { main: MainStore }) => {
 
   authPusher.connection.bind("error", (err: Error) => {
     // eslint-disable-next-line no-console
-    console.log("Error", err);
+    console.log("Connection Error", err);
   });
 };
 
