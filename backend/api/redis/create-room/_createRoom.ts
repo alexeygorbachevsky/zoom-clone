@@ -1,5 +1,4 @@
 import { redisClient, connectRedis, disconnectRedis } from "../_index";
-import { isDev } from "../../constants/_env";
 import { getNewRoomId } from "./ducks/_helpers";
 
 const createRoom = async (socketId: string): Promise<string | null> => {
@@ -12,15 +11,12 @@ const createRoom = async (socketId: string): Promise<string | null> => {
 
     await redisClient.hSet("rooms", newRoomId, JSON.stringify([socketId]));
   } catch (err) {
-    if (isDev) {
-      console.log("Error", err);
-    }
+    console.log("Error", err);
   }
 
   await disconnectRedis();
 
   return newRoomId;
-
 
   // await redisClient.hSet("rooms", newRoomId, JSON.stringify([socketId]));
   // const allRooms = await redisClient.hGetAll("rooms");

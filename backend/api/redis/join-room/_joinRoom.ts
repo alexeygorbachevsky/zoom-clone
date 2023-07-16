@@ -1,5 +1,4 @@
 import { redisClient, connectRedis, disconnectRedis } from "../_index";
-import { isDev } from "../../constants/_env";
 
 const joinRoom = async (roomId: string, socketId: string): Promise<boolean> => {
   let isJoined = false;
@@ -65,9 +64,7 @@ const joinRoom = async (roomId: string, socketId: string): Promise<boolean> => {
     // );
     // console.log("isDeleted", isDeleted);
   } catch (err) {
-    if (isDev) {
-      console.log("Error", err);
-    }
+    console.log("Error", err);
   }
 
   await disconnectRedis();
