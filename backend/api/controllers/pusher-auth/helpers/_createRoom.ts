@@ -5,17 +5,22 @@ interface CreateRoomArgs {
   socketId: string;
 }
 
-const createRoom = async ({ socketId }: CreateRoomArgs) => {
+interface Return {
+  error: WebError | null;
+  roomId: string | null;
+}
+
+const createRoom = async ({ socketId }: CreateRoomArgs): Promise<Return> => {
   const newRoomId = await createRoomDB(socketId);
 
   if (!newRoomId) {
     const error: WebError = new Error("Room creation error");
     error.status = 500;
 
-    return error;
+    return { error, roomId: null };
   }
 
-  return null;
+  return { error: null, roomId: newRoomId };
 };
 
 export default createRoom;

@@ -24,9 +24,13 @@ export const pusherAuth = async (
   };
 
   let error = null;
+  let currentRoomId = roomId;
 
   if (action === ACTIONS.CREATE_ROOM) {
-    error = await createRoom(args);
+    const { error: createRoomError, roomId } = await createRoom(args);
+
+    error = createRoomError;
+    currentRoomId = roomId;
   }
 
   if (action === ACTIONS.JOIN_ROOM) {
@@ -44,6 +48,7 @@ export const pusherAuth = async (
     user_id: socketId,
     user_info: {
       doneAction: action,
+      roomId: currentRoomId,
     },
   });
 
