@@ -1,47 +1,45 @@
-import { NextFunction } from "express";
+import Pusher from "pusher";
 
 import { EVENTS } from "../../../constants/_web-rtc";
 import { WebError } from "../../../constants/_types";
 import { joinRoomDB } from "../../../redis/_index";
-import { getPusher } from "../../../helpers/_pusher";
 
 interface JoinRoomArgs {
   socketId: string;
   channel: string;
   roomId: string;
-  next: NextFunction;
+  pusher: Pusher;
 }
 
-const joinRoom = async ({ socketId, channel, roomId, next }: JoinRoomArgs) => {
+const joinRoom = async ({
+  socketId,
+  channel,
+  roomId,
+  pusher,
+}: JoinRoomArgs) => {
   if (!roomId) {
-    const err: WebError = new Error(
+    const error: WebError = new Error(
       "Room joining error. Room id is not provided by client.",
     );
-    err.status = 400;
+    error.status = 400;
 
-    next(err);
-
-    return;
+    return error;
   }
 
   const isJoined = await joinRoomDB(roomId, socketId);
 
   if (!isJoined) {
-    const err: WebError = new Error(
+    const error: WebError = new Error(
       "Room joining error. Room id is not present.",
     );
-    err.status = 404;
+    error.status = 404;
 
-    next(err);
-
-    return;
+    return error;
   }
-
-  const pusher = getPusher();
 
   pusher.trigger(channel, EVENTS.ROOM_JOINED, roomId);
 
-  return pusher;
+  return null;
 };
 
 export default joinRoom;
