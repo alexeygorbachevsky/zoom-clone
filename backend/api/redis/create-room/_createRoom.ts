@@ -12,6 +12,8 @@ const createRoom = async (socketId: string): Promise<string | null> => {
     await redisClient.hSet("rooms", newRoomId, JSON.stringify([socketId]));
   } catch (err) {
     console.log("Error", err);
+
+    throw err;
   }
 
   await disconnectRedis();
