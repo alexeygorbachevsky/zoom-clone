@@ -5,7 +5,7 @@ import { WebError } from "../constants/_types";
 
 export const _errorHandler = (
   err: WebError,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction,
 ): void => {
@@ -17,8 +17,8 @@ export const _errorHandler = (
 };
 
 export const errorNotFoundHandler = (
-  req: Request,
-  res: Response,
+  _req: Request,
+  _res: Response,
   next: NextFunction,
 ): void => {
   next(createError(404));

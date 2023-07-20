@@ -3,23 +3,28 @@ import Pusher from "pusher-js";
 import fetchPusherAuthToken from "api/fetchPusherAuthToken";
 
 interface Args {
-  action: string;
+  action?: string;
   roomId?: string;
+  userId?: string;
 }
 
-const getAuthPusher = ({ action, roomId }: Args) =>
+const getPusher = ({ action, roomId, userId }: Args) =>
   new Pusher(process.env.PUSHER_KEY!, {
     authorizer: channel => ({
       authorize: async (socketId, callback) => {
         try {
-          const result = await fetchPusherAuthToken({
-            socketId,
-            action,
+          const data = await fetchPusherAuthToken({
             channelName: channel.name,
             roomId,
+            socketId,
+            action,
+            userId,
           });
 
-          callback(null, result);
+          // eslint-disable-next-line no-console
+          console.log("data", data)
+
+          callback(null, data);
         } catch (err) {
           // TODO:
           // eslint-disable-next-line no-console
@@ -34,4 +39,4 @@ const getAuthPusher = ({ action, roomId }: Args) =>
     forceTLS: true,
   });
 
-export default getAuthPusher;
+export default getPusher;

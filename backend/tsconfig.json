@@ -1,21 +1,30 @@
 {
     "compilerOptions": {
+        "target": "es2020",
         "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es2017",
-        "noImplicitAny": true,
+        "allowJs": false,
+        "outDir": "./build",
+        "rootDir": "./api",
+        "downlevelIteration": false,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
         "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "api/types/*"
-            ]
-        }
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noPropertyAccessFromIndexSignature": false
     },
+    "exclude": [
+        "node_modules/"
+    ],
     "include": [
-        "api/**/*"
+        "./api/**/*",
+        "./.eslintrc.js"
     ]
 }

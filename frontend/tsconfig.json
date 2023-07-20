@@ -32,6 +32,6 @@
     "target": "ES6", // Specify ECMAScript target version
   },
   "include": [
-    "src"
+    "src",
   ]
 }

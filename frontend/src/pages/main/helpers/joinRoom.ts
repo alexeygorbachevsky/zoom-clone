@@ -1,17 +1,23 @@
-import { ACTIONS, CHANNEL, EVENTS } from "constants/web-rtc";
+import { ACTIONS, CHANNEL } from "constants/web-rtc";
 
 import { MainStore } from "store/stores";
-import getAuthPusher from "pages/main/helpers/getAuthPusher";
+
+import getPusher from "helpers/pusher";
+import { history } from "helpers/history";
+
+import { ROUTES } from "constants/routes";
 
 const joinRoom = ({
   main,
   roomId,
+  action = ACTIONS.joinRoom,
 }: {
   main: MainStore;
-  roomId: string;
+  roomId?: string;
+  action?: string;
 }) => {
   try {
-    const authPusher = getAuthPusher({ action: ACTIONS.JOIN_ROOM, roomId });
+    const authPusher = getPusher({ action, roomId });
 
     if (!authPusher) {
       return;
@@ -26,30 +32,42 @@ const joinRoom = ({
       // eslint-disable-next-line no-console
       console.log("channel", channel);
 
-      channel.bind(EVENTS.ROOM_JOINED, (roomId: string) => {
-        main.setPusher(authPusher);
-
-        // eslint-disable-next-line no-console
-        console.log("joined roomId", roomId);
-        // navigate(`${ROUTES.room}/${roomId}`);
-      });
-
-      channel.bind("pusher:subscription_succeeded", (data: never) => {
-        // var wasTriggered = pusher.trigger('client-event', {some: 'data'});
-
+      // eslint-disable-next-line
+      channel.bind("pusher:subscription_succeeded", (data: any) => {
         // eslint-disable-next-line no-console
         console.log("pusher:subscription_succeeded", data);
+
+        main.setPusher(authPusher);
+        main.setUserId(data.me.id);
+
+
+        history.navigate!(
+          `/${ROUTES.room}/${data.me.info.roomId}`,
+          {
+            replace: true,
+          },
+        );
       });
 
       channel.bind("pusher:subscription_error", () => {
         // eslint-disable-next-line no-console
         console.log("Joining error");
+
+        authPusher.disconnect();
+
+        main.setPusher(null);
+        main.setUserId(null);
       });
     });
 
     authPusher.connection.bind("error", (err: Error) => {
       // eslint-disable-next-line no-console
       console.log("Error", err);
+
+      authPusher.disconnect();
+
+      main.setPusher(null);
+      main.setUserId(null);
     });
   } catch (err) {
     // eslint-disable-next-line no-console

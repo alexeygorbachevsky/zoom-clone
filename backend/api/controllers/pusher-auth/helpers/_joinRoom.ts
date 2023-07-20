@@ -1,15 +1,12 @@
 import { WebError } from "../../../constants/_types";
-import { joinRoomDB } from "../../../redis/_index";
+import { joinRoomRedis } from "../../../redis/_index";
 
 interface JoinRoomArgs {
-  socketId: string;
+  userId?: string;
   roomId: string;
 }
 
-const joinRoom = async ({
-  socketId,
-  roomId,
-}: JoinRoomArgs) => {
+const joinRoom = async ({ userId, roomId }: JoinRoomArgs) => {
   if (!roomId) {
     const error: WebError = new Error(
       "Room joining error. Room id is not provided by client.",
@@ -19,9 +16,9 @@ const joinRoom = async ({
     throw error;
   }
 
-  const isJoined = await joinRoomDB(roomId, socketId);
+  const currentUserId = await joinRoomRedis(roomId, userId);
 
-  if (!isJoined) {
+  if (!currentUserId) {
     const error: WebError = new Error(
       "Room joining error. Room id is not present.",
     );
@@ -29,6 +26,8 @@ const joinRoom = async ({
 
     throw error;
   }
+
+  return currentUserId;
 };
 
 export default joinRoom;

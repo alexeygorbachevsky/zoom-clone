@@ -5,10 +5,11 @@ import { apiConstants } from "./ducks";
 const { DOMAIN } = apiConstants;
 
 interface Params {
-  socketId: string;
-  action: string;
   channelName: string;
   roomId?: string;
+  socketId: string;
+  action?: string;
+  userId?: string;
 }
 
 const fetchPusherAuthToken = async (params: Params) => {

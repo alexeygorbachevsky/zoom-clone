@@ -1,24 +1,32 @@
 import { redisClient, connectRedis, disconnectRedis } from "../_index";
+import { getNewUserId } from "../helpers/_getNewUserId";
 
-const joinRoom = async (roomId: string, socketId: string): Promise<boolean> => {
-  let isJoined = false;
+const joinRoom = async (roomId: string, userId?: string): Promise<string | null> => {
+  let currentUserId = null;
 
   try {
     await connectRedis();
 
+    currentUserId = userId || (await getNewUserId()) as string;
+
     const room = await redisClient.hGet("rooms", roomId);
 
     if (!room) {
-      return false;
+      return null;
     }
 
     const roomMembers = JSON.parse(room);
 
-    roomMembers.push(socketId);
+    const isUserAlreadyInRoom = roomMembers.find(
+      (memberId: string) => memberId === userId,
+    );
 
-    await redisClient.hSet("rooms", roomId, JSON.stringify(roomMembers));
+    console.log("isUserAlreadyInRoom", isUserAlreadyInRoom);
 
-    isJoined = true;
+    if (!isUserAlreadyInRoom) {
+      roomMembers.push(currentUserId);
+      await redisClient.hSet("rooms", roomId, JSON.stringify(roomMembers));
+    }
 
     // remove user from key room member
     // redisClient.srem(roomId, userId);
@@ -67,11 +75,11 @@ const joinRoom = async (roomId: string, socketId: string): Promise<boolean> => {
     console.log("Error", err);
 
     throw err;
+  } finally {
+    await disconnectRedis();
   }
 
-  await disconnectRedis();
-
-  return isJoined;
+  return currentUserId;
 };
 
 export default joinRoom;

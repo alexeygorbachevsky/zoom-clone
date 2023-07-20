@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import clearRooms from "../../redis/clear-rooms/_clearRooms";
 
 export const pusherAuthClearAll = async (
-  req: Request,
+  _req: Request,
   res: Response,
 ): Promise<void> => {
   await clearRooms();

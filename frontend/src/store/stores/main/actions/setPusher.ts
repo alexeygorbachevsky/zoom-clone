@@ -1,9 +1,7 @@
-import Pusher from "pusher-js";
-
 import type MainStore from "../mainStore";
+import { MainState } from "../types";
 
-// eslint-disable-line no-unused-vars
-function setPusher(this: MainStore, payload: Pusher) {
+function setPusher(this: MainStore, payload: MainState["pusher"]) {
   this.pusher = payload;
 }
 

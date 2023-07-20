@@ -12,6 +12,7 @@ module.exports = {
   ],
   rules: {
     // OFF
+    "no-unused-vars": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
     "class-methods-use-this": 0,
     "import/prefer-default-export": 0,
@@ -50,7 +51,7 @@ module.exports = {
     // WARN
     "no-console": [1, { allow: ["assert"] }],
     "no-debugger": 1,
-    "no-unused-vars": 1,
+    "@typescript-eslint/no-unused-vars": 1,
     "react/no-unused-prop-types": 1,
     "react/no-array-index-key": 1,
     "react/default-props-match-prop-types": 1,

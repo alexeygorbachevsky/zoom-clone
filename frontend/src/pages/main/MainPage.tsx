@@ -1,47 +1,77 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-// import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import {
-  CHANNEL,
-  ICE_CANDIDATE_EXCHANGE_EVENT,
-} from "constants/web-rtc";
+import { ACTIONS } from "constants/web-rtc";
 
 import { useMobX } from "hooks";
 
-import { createRoom, joinRoom } from "./helpers";
+import clearAllRooms from "api/clearAllRooms";
+import removeSocket from "api/removeSocket";
+
+import { history } from "helpers/history";
+
+import { joinRoom } from "./helpers";
 
 import styles from "./MainPage.module.scss";
 
 const { wrapper } = styles;
 
 const MainPage = observer(() => {
+  history.navigate = useNavigate();
+  history.location = useLocation();
+
   const [joiningRoomId, setJoiningRoomId] = useState("");
+
+  const [roomId, setRoomId] = useState("");
+  const [userId, setUserId] = useState("");
+
   const { main } = useMobX();
   const { pusher } = main;
-  // const navigate = useNavigate();
 
-  const onCreateRoom = useCallback(() => {
-    createRoom({ main });
-  }, [main]);
+  const onCreateRoom = () => {
+    joinRoom({ main, action: ACTIONS.createRoom });
+  };
 
-  const onJoinRoom = useCallback(() => {
+  const onJoinRoom = () => {
     joinRoom({ main, roomId: joiningRoomId });
-  }, [main, joiningRoomId]);
+  };
 
   const onChangeJoinRoomInput = (e: ChangeEvent<HTMLInputElement>) => {
     setJoiningRoomId(e.target.value);
   };
 
-  // eslint-disable-next-line
-  const sendEvent = () => {
-    pusher?.send_event(
-      ICE_CANDIDATE_EXCHANGE_EVENT,
-      {
-        message: "hello buddies",
-      },
-      CHANNEL,
-    );
+  // TODO: admin
+  const onClearRooms = async () => {
+    try {
+      const isCleared = await clearAllRooms();
+
+      // eslint-disable-next-line no-console
+      console.log("isCleared", isCleared);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log("Clear rooms error", err);
+    }
+  };
+
+  const onChangeRoomId = (e: ChangeEvent<HTMLInputElement>) => {
+    setRoomId(e.target.value);
+  };
+
+  const onChangeUserId = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserId(e.target.value);
+  };
+
+  const onRemoveSocket = async () => {
+    try {
+      const isCleared = await removeSocket({ roomId, userId });
+
+      // eslint-disable-next-line no-console
+      console.log("isCleared", isCleared);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log("Clear rooms error", err);
+    }
   };
 
   useEffect(
@@ -56,6 +86,11 @@ const MainPage = observer(() => {
       <button onClick={onCreateRoom}>Create room</button>
       <input value={joiningRoomId} onChange={onChangeJoinRoomInput} />
       <button onClick={onJoinRoom}>Join room</button>
+      <button onClick={onClearRooms}>Clear all rooms</button>
+
+      <input value={roomId} onChange={onChangeRoomId} />
+      <input value={userId} onChange={onChangeUserId} />
+      <button onClick={onRemoveSocket}>Remove socket</button>
     </div>
   );
 });

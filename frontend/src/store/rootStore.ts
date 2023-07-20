@@ -1,15 +1,17 @@
 import { createContext } from "react";
 import { configure } from "mobx";
 
-import { AlertsStore, MainStore } from "./stores";
+import { AlertsStore, MainStore, WebRTCStore  } from "./stores";
 
 class RootStore {
   main: MainStore;
   alerts: AlertsStore;
+  webRTC: WebRTCStore;
 
   constructor() {
-    this.main = new MainStore(this);
     this.alerts = new AlertsStore(this);
+    this.main = new MainStore(this);
+    this.webRTC = new WebRTCStore(this);
   }
 
   static configure() {

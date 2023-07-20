@@ -1,5 +1,5 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 
 import Loader from "assets/icons/loader.svg";
 
@@ -20,7 +20,10 @@ const Routing = () => (
     <Routes>
       <Route path={ROUTES.main} element={<Outlet />}>
         <Route index element={<MainPage />} />
-        <Route path={`${ROUTES.room}/:id`} element={<RoomPage />} />
+        <Route path={ROUTES.room}>
+          <Route index element={<Navigate to={ROUTES.main} replace />} />
+          <Route path=":roomId" element={<RoomPage />} />
+        </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
