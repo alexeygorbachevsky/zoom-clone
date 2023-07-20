@@ -1,4 +1,4 @@
-import { app } from "./app";
+import { serverlessApp } from "./serverless-app";
 
 
-module.exports = app;
+module.exports = serverlessApp;

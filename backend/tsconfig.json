@@ -4,7 +4,7 @@
         "module": "commonjs",
         "allowJs": false,
         "outDir": "./build",
-        "rootDir": "./api",
+        "rootDir": ".",
         "downlevelIteration": false,
         "strict": true,
         "noUnusedLocals": true,
@@ -24,6 +24,7 @@
         "node_modules/"
     ],
     "include": [
+        "./src/**/*",
         "./api/**/*",
         "./.eslintrc.js"
     ]

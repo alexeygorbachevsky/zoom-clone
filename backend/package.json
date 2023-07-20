@@ -4,7 +4,7 @@
   "description": "Zoom clone backend",
   "scripts": {
     "build": "npm run build-ts",
-    "start": "nodemon api/_server.ts",
+    "start": "nodemon src/_server.ts",
     "start-build": "npm run serve",
     "vercel-build": "echo hello",
     "build:watch": "tsc --watch",
