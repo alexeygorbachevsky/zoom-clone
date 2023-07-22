@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 import { useMobX } from "hooks";
@@ -9,31 +8,18 @@ import { useWebRTC } from "./duck/hooks";
 import { setVideo } from "./duck/helpers";
 
 import styles from "./RoomPage.module.scss";
-import localStorageUtil from "../../operations/localStorage";
-import localStorage from "../../operations/localStorage";
 
 const { wrapper } = styles;
-
-type UseParams = {
-  roomId: string;
-};
 
 // TODO: handle refresh page when socket already connected
 // TODO: validate roomId via backend
 
 const RoomPage = observer(() => {
-  const { roomId } = useParams() as UseParams;
   const { webRTC, main } = useMobX();
 
-  const userId =
-    main.userId || (localStorageUtil.get(localStorage.keys.userId) as string);
+  const userId = main.userId as string;
 
-  useWebRTC({ roomId, userId });
-
-  // TODO: error state + alert
-  if (main.pusherError || !main.userId) {
-    return <div className={wrapper}>Error!</div>;
-  }
+  useWebRTC();
 
   if (!main.pusher) {
     return (
@@ -41,6 +27,11 @@ const RoomPage = observer(() => {
         <Loader />
       </div>
     );
+  }
+
+  // TODO: error state + alert
+  if (main.pusherError || !userId) {
+    return <div className={wrapper}>Error!</div>;
   }
 
   return (

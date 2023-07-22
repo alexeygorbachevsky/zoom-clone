@@ -41,5 +41,6 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/naming-convention": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
-  },
+    "@typescript-eslint/no-shadow": 0,
+  }
 };

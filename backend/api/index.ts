@@ -1,4 +1,5 @@
-import { serverlessApp } from "./serverless-app";
+// deploy app as serverless functions for vercel
+import { app } from "../src/app";
 
 
-module.exports = serverlessApp;
+module.exports = app;

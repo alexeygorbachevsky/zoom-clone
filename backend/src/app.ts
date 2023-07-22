@@ -5,12 +5,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { _errorHandler } from "./middlewares/_errorHandler";
-import { homeRoute } from "./routes/_home";
-import { pusherAuthRoute } from "./routes/_pusherAuth";
-import { handleUncaughtErrors } from "./helpers/_errors";
+import homeRoute from "./routes/home";
+import pusherAuthRoute from "./routes/pusherAuth";
+import errorHandler from "./middleware/errorHandler";
+import { handleUncaughtErrors } from "./helpers/errors";
 
 export const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -20,6 +21,6 @@ app.use(logger("dev"));
 app.use("/", homeRoute);
 app.use("/pusher/auth", pusherAuthRoute);
 
-app.use(_errorHandler);
+app.use(errorHandler);
 
 handleUncaughtErrors();

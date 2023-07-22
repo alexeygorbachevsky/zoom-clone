@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { PresenceChannel } from "pusher-js";
 import freeice from "freeice";
 
 import { useMobX } from "hooks";
@@ -6,12 +8,6 @@ import { useMobX } from "hooks";
 import getPusher from "helpers/pusher";
 
 import { CHANNEL, EVENTS } from "constants/web-rtc";
-import getRoomUsers from "api/getRoomUsers";
-
-interface Props {
-  roomId: string;
-  userId: string;
-}
 
 interface UserJoined {
   roomId: string;
@@ -36,12 +32,28 @@ interface OnUserRemove {
   userId: string;
 }
 
-export const useWebRTC = ({ roomId, userId }: Props) => {
+type UseParams = {
+  roomId: string;
+};
+
+interface Member {
+  id: string;
+  info: { roomId: string };
+}
+
+export const useWebRTC = () => {
+  const { roomId } = useParams() as UseParams;
   const { webRTC, main } = useMobX();
 
   const authPusher = main.pusher;
+  const userId = main.userId;
 
   const initializeVideo = async () => {
+    if (!userId) {
+      // TODO throw alert error
+      return;
+    }
+
     try {
       webRTC.localMediaStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -52,10 +64,14 @@ export const useWebRTC = ({ roomId, userId }: Props) => {
       // eslint-disable-next-line
       console.log("EVENTS.userJoined have sent");
 
-      const roomUserIds = await getRoomUsers(roomId);
+      const channel = authPusher!.channel(CHANNEL) as PresenceChannel;
 
-      roomUserIds.forEach(roomUserId => {
-        onSocketJoin({ roomId, userId: roomUserId, shouldCreateOffer: true });
+      // eslint-disable-next-line no-console
+      console.log("channel", channel.members);
+
+      // TODO: use pusher api https://pusher.com/docs/channels/using_channels/presence-channels/#memberseachfunction-446864824
+      channel.members.each(({ id }: Member) => {
+        onSocketJoin({ roomId, userId: id, shouldCreateOffer: true });
       });
 
       authPusher!.send_event(EVENTS.userJoined, { roomId, userId }, CHANNEL);
@@ -188,7 +204,7 @@ export const useWebRTC = ({ roomId, userId }: Props) => {
 
   useEffect(() => {
     if (!authPusher) {
-      const pusher = getPusher({ roomId, userId });
+      const pusher = getPusher({ roomId });
 
       pusher.connection.bind("connected", (data: never) => {
         // eslint-disable-next-line no-console

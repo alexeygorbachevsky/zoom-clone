@@ -4,7 +4,6 @@ import type { RootStoreType } from "../../rootStore";
 
 import { setPusher, setUserId } from "./actions";
 import { MainState } from "./types";
-import localStorageUtil from "../../../operations/localStorage";
 
 class MainStore {
   rootStore: RootStoreType;
@@ -12,9 +11,7 @@ class MainStore {
   // State
   pusher: MainState["pusher"] = null;
   pusherError: MainState["pusherError"] = null;
-  userId: MainState["userId"] = localStorageUtil.get(
-    localStorageUtil.keys.userId,
-  );
+  userId: MainState["userId"] = null;
 
   constructor(rootStore: RootStoreType) {
     this.rootStore = rootStore;
