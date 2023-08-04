@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 import type { RootStoreType } from "../../rootStore";
 
-import { setPusher } from "./actions";
+import { clearState } from "./actions";
 import { WebRTCState } from "./types";
 
 class WebRTCStore {
@@ -12,7 +12,7 @@ class WebRTCStore {
   clients: WebRTCState["clients"] = {};
   peerConnections: WebRTCState["peerConnections"] = {};
   peerMediaElements: WebRTCState["peerMediaElements"] = {};
-  remoteStreams: WebRTCState["remoteStreams"] = {};
+  remoteMediaStreams: WebRTCState["remoteMediaStreams"] = {};
   localMediaStream: WebRTCState["localMediaStream"] = null;
 
   constructor(rootStore: RootStoreType) {
@@ -20,14 +20,14 @@ class WebRTCStore {
     makeAutoObservable(this, {
       rootStore: false,
       localMediaStream: false,
-      remoteStreams: false,
+      remoteMediaStreams: false,
       peerMediaElements: false,
       peerConnections: false,
     });
   }
 
   // Actions
-  setPusher = setPusher;
+  clearState = clearState;
 }
 
 export default WebRTCStore;

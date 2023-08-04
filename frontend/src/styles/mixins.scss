@@ -1,0 +1,23 @@
+@use "sass:map";
+
+@import "./constants";
+
+@mixin smaller-than-or-equal($breakpoint) {
+  $size: map-get($max-screen-width, $breakpoint);
+
+  @media screen and (max-width: $size) {
+    @content;
+  }
+}
+
+@mixin flexAllCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin textEllipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

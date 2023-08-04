@@ -1,1 +1,1 @@
-export { default as setPusher } from "./setPusher";
+export { default as clearState } from "./clearState";

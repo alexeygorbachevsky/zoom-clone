@@ -2,7 +2,15 @@ import { makeAutoObservable } from "mobx";
 
 import type { RootStoreType } from "../../rootStore";
 
-import { setPusher, setUserId } from "./actions";
+import {
+  setPusher,
+  setUserId,
+  setIsRoomJoining,
+  setIsLoadingPusher,
+  setPusherError,
+  setIsVideo,
+  setIsAudio,
+} from "./actions";
 import { MainState } from "./types";
 
 class MainStore {
@@ -12,6 +20,10 @@ class MainStore {
   pusher: MainState["pusher"] = null;
   pusherError: MainState["pusherError"] = null;
   userId: MainState["userId"] = null;
+  isLoadingPusher: MainState["isLoadingPusher"] = true;
+  isRoomJoining: MainState["isRoomJoining"] = false;
+  isVideo: MainState["isVideo"] = true;
+  isAudio: MainState["isAudio"] = true;
 
   constructor(rootStore: RootStoreType) {
     this.rootStore = rootStore;
@@ -21,6 +33,11 @@ class MainStore {
   // Actions
   setPusher = setPusher;
   setUserId = setUserId;
+  setIsRoomJoining = setIsRoomJoining;
+  setIsLoadingPusher = setIsLoadingPusher;
+  setPusherError = setPusherError;
+  setIsVideo = setIsVideo;
+  setIsAudio = setIsAudio;
 }
 
 export default MainStore;

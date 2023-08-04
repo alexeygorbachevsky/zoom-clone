@@ -1,0 +1,30 @@
+@import "styles/mixins";
+
+.button {
+  cursor: pointer;
+  padding: 15px 30px;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 500;
+  color: white;
+  border-radius: 32px;
+  background-color: #0b5cff;
+  border: none;
+
+  &:hover {
+    background-color: #0a53e5;
+  }
+
+  @include smaller-than-or-equal("tabletSmall") {
+    font-size: 16px;
+  }
+}
+
+.disabledButton {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: #0b5cff;
+  }
+}

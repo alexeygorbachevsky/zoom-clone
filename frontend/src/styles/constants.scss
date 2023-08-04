@@ -1,0 +1,25 @@
+$color: ("main": #f7f5f8);
+
+$screen-width: (
+        "desktopLarge": 1440px,
+        "desktopMedium": 1366px,
+        "desktopSmall": 1200px,
+        "tabletLarge": 1024px,
+        "tabletSmall": 768px,
+        "mobileLarge": 720px,
+        "mobileMedium": 432px,
+);
+
+$max-screen-width: (
+        "desktopLarge": calc(map-get($screen-width, "desktopLarge") - 1px),
+        "desktopMedium": calc(map-get($screen-width, "desktopMedium") - 1px),
+        "desktopSmall": calc(map-get($screen-width, "desktopSmall") - 1px),
+        "tabletLarge": calc(map-get($screen-width, "tabletLarge") - 1px),
+        "tabletSmall": calc(map-get($screen-width, "tabletSmall") - 1px),
+        "mobileLarge": calc(map-get($screen-width, "mobileLarge") - 1px),
+        "mobileMedium": calc(map-get($screen-width, "mobileMedium") - 1px),
+);
+
+$headerHeight: 66px;
+
+$zIndex: ("header": 10);

@@ -12,19 +12,6 @@
     "noEmit": true, // Do not emit output (meaning do not compile code, only perform type checking)
     "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
     "noImplicitAny": true, //  Issue an error on any variables whose type is implicitly inferred as any
-    "paths": {
-      "api/*": ["api/*"],
-      "assets/*": ["assets/*"],
-      "components": ["components"],
-      "constants/*": ["constants/*"],
-      "declarations/*": ["declarations/*"],
-      "helpers/*": ["helpers/*"],
-      "hooks": ["hooks"],
-      "operations": ["operations"],
-      "pages/*": ["pages/*"],
-      "selectors": ["selectors"],
-      "store": ["store"],
-    },
     "resolveJsonModule": true,  // Include modules imported with .json extension
     "skipLibCheck": true, // Skip type checking of all declaration files
     "strict": true, // Enable all strict type checking options

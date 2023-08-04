@@ -1,6 +1,6 @@
 import LoaderIcon from "assets/icons/loader.svg";
 
-import styles from "./styles/loader.module.scss";
+import styles from "./loader.module.scss";
 
 const Loader = () => (
   <div className={styles.wrapper}>

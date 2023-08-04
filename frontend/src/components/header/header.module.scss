@@ -1,0 +1,21 @@
+@use "sass:map";
+
+@import "styles/constants";
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: map-get($zIndex, "header");
+
+  padding: 0 24px;
+  height: $headerHeight;
+  width: 100%;
+  flex: auto;
+
+  display: flex;
+  align-items: center;
+
+  background-color: white;
+  box-shadow: 0 0 2px rgba(0,0,0,0.2)
+}

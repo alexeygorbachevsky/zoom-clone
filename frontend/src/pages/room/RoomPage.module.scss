@@ -1,8 +1,125 @@
 @use "sass:map";
 
-@import "../../css/constants";
+@import "styles/constants";
+@import "styles/mixins";
 
 
 .wrapper {
+  padding: 48px 48px 112px;
+  min-height: 100vh;
+  @include flexAllCenter();
+  flex-wrap: wrap;
+  gap: 16px;
+  background-color: #19191a;
+
+  @include smaller-than-or-equal("mobileMedium") {
+    padding: 48px 32px 104px;
+  }
+
+  .video {
+    height: 300px;
+    width: 400px;
+    object-fit: cover;
+
+    @include smaller-than-or-equal("mobileMedium") {
+      width: 100%;
+    }
+
+  }
+
+  .videoControls {
+    position: fixed;
+    bottom: 0;
+    height: 64px;
+    width: 100%;
+    background-color: #19191a;
+
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+
+    .controlButton {
+      position: relative;
+      width: 72px;
+      height: 48px;
+      cursor: pointer;
+      background-color: transparent;
+      outline: none;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+
+      color: rgba(255, 255, 255, 0.5);
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .icon {
+        color: rgba(255, 255, 255, 0.5);
+        height: 24px;
+        width: 24px;
+      }
+
+      &:hover .icon {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .controlButtonMuted {
+      &:before {
+        position: absolute;
+        top: -4px;
+        left: 50%;
+        content: "";
+        transform: rotate(45deg);
+        width: 2px;
+        height: 36px;
+        background-color: #da1515;
+      }
+    }
+
+    .stopButton {
+      width: 112px;
+
+    }
+
+    .leaveRoomButton {
+      margin-left: auto;
+      width: 112px;
+      height: 28px;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      border-radius: 6px;
+      background-color: #b21717;
+      color: white;
+      font-size: 14px;
+
+
+      &:hover {
+        background-color: #da1515;
+      }
+    }
+
+  }
+}
+
+.errorWrapper {
   height: 100vh;
+  @include flexAllCenter();
+
+  .error {
+    font-size: 32px;
+    font-weight: 600;
+  }
 }

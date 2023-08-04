@@ -18,16 +18,8 @@ const getPusher = ({ action, roomId }: Args) =>
             socketId,
             action,
           });
-
-          // eslint-disable-next-line no-console
-          console.log("data", data)
-
           callback(null, data);
         } catch (err) {
-          // TODO:
-          // eslint-disable-next-line no-console
-          console.log("Error", err);
-
           const error = err as Error;
           callback(error, null);
         }

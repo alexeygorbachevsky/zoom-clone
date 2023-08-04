@@ -2,7 +2,7 @@ import { createClient } from "redis";
 import * as process from "process";
 
 import { isDev } from "../constants/env";
-import { REDIS_LOCK_KEY } from "../constants/redis";
+// import { REDIS_LOCK_KEY } from "../constants/redis";
 
 export const redisClient = createClient({
   password: process.env.REDIS_PASSWORD,
@@ -33,17 +33,17 @@ if (isDev) {
 export const connectRedis = async () => {
   await redisClient.connect();
 
-  const isUnlocked = await redisClient.set(REDIS_LOCK_KEY, REDIS_LOCK_KEY);
-
-  console.log("isUnlocked", isUnlocked)
-
-  if (!isUnlocked) {
-    throw new Error("Already locked by another user");
-  }
+  // const isUnlocked = await redisClient.set(REDIS_LOCK_KEY, REDIS_LOCK_KEY);
+  //
+  // console.log("isUnlocked", isUnlocked)
+  //
+  // if (!isUnlocked) {
+  //   throw new Error("Already locked by another user");
+  // }
 };
 
 export const disconnectRedis = async (): Promise<void> => {
-  await redisClient.del(REDIS_LOCK_KEY);
+  // await redisClient.del(REDIS_LOCK_KEY);
   await redisClient.disconnect();
 };
 

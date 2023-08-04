@@ -16,6 +16,9 @@
     "check-not-master": "sh scripts/shell/check-not-master.sh"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.3",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@types/jest": "^27.0.1",
@@ -78,6 +81,7 @@
     "serve": "^14.2.0",
     "style-loader": "^3.3.1",
     "typescript": "^4.8.4",
+    "uuid": "^9.0.0",
     "webpack": "^5.88.1",
     "webpack-dev-server": "4.11.1",
     "webpack-manifest-plugin": "^4.0.2",
@@ -134,5 +138,8 @@
       "jest-watch-typeahead/testname"
     ],
     "resetMocks": true
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.2"
   }
 }

@@ -1,0 +1,191 @@
+@use "sass:map";
+
+@import "styles/constants";
+@import "styles/mixins";
+
+.wrapper {
+  margin-top: $headerHeight;
+  flex: auto;
+  width: 100%;
+  display: flex;
+
+  @include smaller-than-or-equal("desktopLarge") {
+    flex-direction: column;
+    height: calc(100vh - $headerHeight);
+  }
+
+  .leftWrapper {
+    padding: 0 60px;
+    height: calc(100vh - $headerHeight);
+    flex: 1;
+    gap: 40px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    @include smaller-than-or-equal("desktopLarge") {
+      height: unset;
+      min-height: 600px;
+    }
+
+    h1 {
+      font-weight: 600;
+      width: 510px;
+      letter-spacing: .03em;
+      font-size: 64px;
+      line-height: 120%;
+      color: #00031f;
+
+      @include smaller-than-or-equal("tabletSmall") {
+        font-size: 32px;
+        width: unset;
+        min-width: 250px;
+      }
+
+      span {
+        color: #007aff;
+      }
+    }
+
+    .text {
+      width: 510px;
+      font-size: 20px;
+      line-height: 140%;
+      color: #00031f;
+      font-weight: 500;
+
+      @include smaller-than-or-equal("tabletSmall") {
+        font-size: 16px;
+        width: unset;
+        min-width: 250px;
+      }
+    }
+
+    .linksWrapper {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      .createRoomLink {
+        position: relative;
+        background-color: transparent;
+        color: #0b5cff;
+        padding-left: 0;
+
+        @include smaller-than-or-equal("tabletSmall") {
+          padding-left: 30px;
+          background-color: #0b5cff;
+          color: white;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: calc(50% - 5px);
+          left: calc(100% - 30px);
+          transform: rotate(-45deg);
+          width: 9px;
+          height: 9px;
+          border-bottom: 2px solid #0b5cff;
+          border-right: 2px solid #0b5cff;
+          opacity: 0;
+          transition: all 0.3s ease-in-out;
+        }
+
+        &:hover::before,
+        &:hover::after {
+          opacity: 1;
+          left: calc(100% - 30px + 20px);
+        }
+      }
+
+      .createRoomLinkDisabled {
+        &::before {
+          opacity: 1;
+          left: calc(100% - 30px + 20px);
+        }
+
+      }
+    }
+
+  }
+
+  .rightWrapper {
+    height: calc(100vh - $headerHeight);
+    flex: 1.2;
+    background-color: #f7f7f8;
+    display: flex;
+    align-items: center;
+
+    @include smaller-than-or-equal("desktopLarge") {
+      flex: 1;
+      height: unset;
+    }
+
+    @include smaller-than-or-equal("tabletSmall") {
+      display: none;
+    }
+
+    .imagesWrapper {
+      width: 100%;
+      position: relative;
+      max-height: 780px;
+      height: 100%;
+      overflow: hidden;
+
+      @include smaller-than-or-equal("desktopLarge") {
+        max-height: unset;
+        min-height: 600px;
+        overflow: unset;
+      }
+
+      .chatImage {
+        position: absolute;
+        z-index: 2;
+        top: 24px;
+        left: calc(50% - 352px);
+        height: 160px;
+        width: 352px;
+      }
+
+
+      .jobImage {
+        width: 330px;
+        height: 400px;
+        position: absolute;
+        top: 24px;
+        left: calc(50% + 24px);
+        background-image: url("/assets/images/job.jpg");
+        background-position: top right;
+        border-radius: 20px;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .laptopImage {
+        width: 330px;
+        height: 300px;
+        position: absolute;
+        bottom: 24px;
+        left: calc(50% - 330px);
+        background-image: url("/assets/images/laptop.jpg");
+        background-position: bottom left;
+        border-radius: 20px;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .barImage {
+        position: absolute;
+        z-index: 2;
+        bottom: 24px;
+        left: calc(50% + 24px);
+        height: 74px;
+        width: 352px;
+      }
+
+    }
+  }
+}

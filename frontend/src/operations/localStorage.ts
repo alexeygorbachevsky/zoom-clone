@@ -2,6 +2,7 @@ enum Keys {
   userId = "user-id",
 }
 
+// TODO: unused
 const localStorageUtil = new (class {
   private keyPrefix = "zoom-clone";
 

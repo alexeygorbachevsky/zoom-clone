@@ -1,11 +1,11 @@
 export const CHANNEL = "presence-zoom-clone";
 
-export const enum ACTIONS {
+export const enum Actions {
   createRoom = "create-room",
   joinRoom = "join-room",
 }
 
-export const enum EVENTS {
+export const enum Events {
   userJoined = "client-user-joined",
   userRemoved = "client-socket-removed",
   iceCandidateShared = "client-ice-candidate-shared",

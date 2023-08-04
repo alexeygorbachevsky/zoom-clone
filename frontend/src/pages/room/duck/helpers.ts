@@ -12,24 +12,16 @@ export const setVideo = ({ id, node, webRTC, myId }: SetVideo) => {
 
   const video = webRTC.peerMediaElements[id];
 
-  // eslint-disable-next-line
-  console.log("video", video)
-
   if (!video) {
     return;
   }
 
-  // eslint-disable-next-line
-  console.log("id === myId", id === myId)
-
   if (id === myId) {
     video.volume = 0;
-
-    // TODO: add common webRTC.mediaStreams
     video.srcObject = webRTC.localMediaStream;
 
     return;
   }
 
-  webRTC.peerMediaElements[id].srcObject = webRTC.remoteStreams[id];
+  webRTC.peerMediaElements[id].srcObject = webRTC.remoteMediaStreams[id];
 };

@@ -1,10 +1,8 @@
 import styles from "./NotFoundPage.module.scss";
 
-const { app } = styles;
-
 const NotFoundPage = () => (
-  <div className={app}>
-      Nothing found
+  <div className={styles.wrapper}>
+      Page is not found
   </div>
 );
 

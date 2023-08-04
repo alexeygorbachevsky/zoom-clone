@@ -2,8 +2,6 @@ import { Component, ReactNode } from "react";
 
 import styles from "./ErrorBoundary.module.scss";
 
-const { wrapper } = styles;
-
 interface Props {
   children?: ReactNode;
 }
@@ -25,9 +23,9 @@ class ErrorBoundary extends Component<Props, State> {
 
     if (isError) {
       return (
-        <div className={wrapper}>
-          <p>Whoops!</p>
-          <div>We couldn’t load that feature. Please try again!</div>
+        <div className={styles.wrapper}>
+          <p>We couldn’t load it.</p>
+          <p>Please try again!</p>
         </div>
       );
     }

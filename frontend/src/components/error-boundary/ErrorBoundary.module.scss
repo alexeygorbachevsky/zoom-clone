@@ -1,4 +1,10 @@
+@import "styles/mixins";
+
 .wrapper {
-  margin: 30px auto;
-  width: 600px;
+  height: 100vh;
+  @include flexAllCenter();
+  flex-direction: column;
+  font-size: 32px;
+  font-weight: 600;
+  gap: 24px;
 }

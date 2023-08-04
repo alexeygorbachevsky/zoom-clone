@@ -1,0 +1,48 @@
+@import "styles/mixins";
+
+.wrapper {
+  position: relative;
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #747486;
+  }
+
+  .error {
+    position: absolute;
+    bottom: -20px;
+    font-size: 12px;
+    color: red;
+  }
+
+  .input {
+    padding: 0 16px;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 2px solid #babacc;
+    outline: none;
+
+    &:focus {
+      border: 2px solid #0E72ED;
+    }
+  }
+
+  .inputError {
+    border: 2px solid red;
+
+    &:focus {
+      border: 2px solid red;
+    }
+  }
+}
+
+
+
+
