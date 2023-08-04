@@ -1,8 +1,10 @@
 //  TODO
 export interface WebRTCState {
   clients: Record<string, string>;
-  peerConnections: Record<string, never>;
-  peerMediaElements: Record<string, never>;
+  // eslint-disable-next-line
+  peerConnections: Record<string, any>;
+  // eslint-disable-next-line
+  peerMediaElements: Record<string, any>;
   remoteMediaStreams: Record<string, MediaStream | null>;
   localMediaStream: MediaStream | null;
 }
