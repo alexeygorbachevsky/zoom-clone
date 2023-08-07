@@ -8,26 +8,27 @@ import { initializePusher } from "operations/pusher";
 
 import {
   initializeVideo,
+  leaveRoom,
   onICEShare,
   onSessionDescriptionShare,
   onSocketJoin,
   onUserRemove,
 } from "./duck/helpers";
 
-type UseParams = {
-  roomId: string;
-};
-
 const useWebRTC = () => {
-  const { roomId } = useParams() as UseParams;
-  const { webRTC, main } = useMobX();
+  const { roomId } = useParams();
+  const {  main } = useMobX();
 
   const pusher = main.pusher;
-  const userId = main.userId;
+  const userId = main.userId as string;
 
   useEffect(() => {
     if (!pusher) {
-      initializePusher({ action: Actions.joinRoom, roomId, shouldRedirect: false });
+      initializePusher({
+        action: Actions.joinRoom,
+        roomId,
+        shouldRedirect: false,
+      });
 
       return;
     }
@@ -43,21 +44,11 @@ const useWebRTC = () => {
 
     initializeVideo({
       userId,
-      roomId,
+      roomId: roomId as string,
     });
 
     return () => {
-      webRTC.localMediaStream?.getTracks().forEach(track => track.stop());
-
-      pusher?.disconnect();
-      webRTC.clearState();
-      main.setPusher(null);
-      main.setUserId(null);
-
-      if (pusher) {
-        // TODO: try without this event
-        pusher.send_event(Events.userRemoved, { roomId, userId }, CHANNEL);
-      }
+      leaveRoom();
     };
   }, [roomId, pusher]);
 };

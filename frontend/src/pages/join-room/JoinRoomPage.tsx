@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import { validate, version } from "uuid";
 
 import { Actions } from "constants/web-rtc";
+import { KeyCodes } from "constants/keyCodes";
 
 import LinearLoader from "components/linear-loader";
 
@@ -16,7 +17,6 @@ import useMobX from "hooks/use-mobx";
 import { initializePusher as joinRoom } from "operations/pusher";
 
 import styles from "./JoinRoomPage.module.scss";
-import { KeyCodes } from "../../constants/keyCodes";
 
 const JoinRoomPage = observer(() => {
   const [isRoomIdError, setIsRoomIdError] = useState(false);

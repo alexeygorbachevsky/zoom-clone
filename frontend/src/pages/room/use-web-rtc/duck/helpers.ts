@@ -26,14 +26,32 @@ interface OnUserRemove {
   userId: string;
 }
 
-export const onUserRemove = ({ userId }: OnUserRemove) => {
+export const leaveRoom = () => {
+  const { webRTC, main } = store;
+
+  webRTC.localMediaStream?.getTracks().forEach(track => track.stop());
+  webRTC.remoteMediaStreams[main.userId as string]?.getTracks().forEach(track => track.stop());
+
+  webRTC.clearState();
+  main.setUserId(null);
+  main.pusher?.disconnect();
+  main.setPusher(null);
+};
+
+interface OnUserRemove {
+  id: string;
+}
+
+export const onUserRemove = ({ id }: OnUserRemove) => {
   const { webRTC } = store;
 
-  webRTC.peerConnections[userId]?.close();
+  webRTC.remoteMediaStreams[id]?.getTracks().forEach(track => track.stop());
+  webRTC.peerConnections[id]?.close();
 
-  delete webRTC.peerConnections[userId];
-  delete webRTC.peerMediaElements[userId];
-  delete webRTC.clients[userId];
+  delete webRTC.peerConnections[id];
+  delete webRTC.peerMediaElements[id];
+  delete webRTC.clients[id];
+  delete webRTC.remoteMediaStreams[id];
 };
 
 export interface SessionDescriptionShare {
@@ -115,17 +133,11 @@ export const onSocketJoin = async ({
     }
   };
 
-  // we should audio + video
-  let tracksCount = 0;
   webRTC.peerConnections[joinedUserId].ontrack = ({
     streams: [remoteStream],
   }: RTCTrackEvent) => {
-    tracksCount += 1;
-
-    if (tracksCount === 2) {
-      webRTC.remoteMediaStreams[joinedUserId] = remoteStream;
-      webRTC.clients[joinedUserId] = joinedUserId;
-    }
+    webRTC.remoteMediaStreams[joinedUserId] = remoteStream;
+    webRTC.clients[joinedUserId] = joinedUserId;
   };
 
   webRTC.localMediaStream?.getTracks().forEach(track => {
@@ -183,9 +195,10 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
 
     const channel = pusher!.channel(CHANNEL) as PresenceChannel;
 
-    // TODO: use pusher api https://pusher.com/docs/channels/using_channels/presence-channels/#memberseachfunction-446864824
-    channel.members.each(({ id }: Member) => {
-      onSocketJoin({ roomId, userId: id, shouldCreateOffer: true });
+    channel.members.each(({ id, info }: Member) => {
+      if (info.roomId === roomId) {
+        onSocketJoin({ roomId, userId: id, shouldCreateOffer: true });
+      }
     });
 
     pusher!.send_event(Events.userJoined, { roomId, userId }, CHANNEL);

@@ -7,7 +7,7 @@ export const enum Actions {
 
 export const enum Events {
   userJoined = "client-user-joined",
-  userRemoved = "client-socket-removed",
+  userRemoved = "pusher:member_removed",
   iceCandidateShared = "client-ice-candidate-shared",
   sessionDescriptionShared = "client-session-description-shared",
 }

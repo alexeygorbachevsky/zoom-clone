@@ -23,5 +23,5 @@ export const setVideo = ({ id, node, webRTC, myId }: SetVideo) => {
     return;
   }
 
-  webRTC.peerMediaElements[id].srcObject = webRTC.remoteMediaStreams[id];
+  video.srcObject = webRTC.remoteMediaStreams[id];
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import classnames from "classnames";
 
@@ -14,8 +14,6 @@ import { Actions } from "constants/web-rtc";
 
 import useMobX from "hooks/use-mobx";
 
-import { history } from "helpers/history";
-
 import { initializePusher as createRoom } from "operations/pusher";
 
 import Button from "basics/button";
@@ -23,9 +21,6 @@ import Button from "basics/button";
 import styles from "./HomePage.module.scss";
 
 const HomePage = observer(() => {
-  history.navigate = useNavigate();
-  history.location = useLocation();
-
   const { main } = useMobX();
 
   const { isRoomJoining } = main;

@@ -5,6 +5,7 @@ function clearState(this: WebRTCStore) {
   this.peerMediaElements = {};
   this.clients = {};
   this.remoteMediaStreams = {};
+  this.localMediaStream = null;
 }
 
 export default clearState;
