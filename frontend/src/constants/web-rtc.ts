@@ -10,4 +10,5 @@ export const enum Events {
   userRemoved = "pusher:member_removed",
   iceCandidateShared = "client-ice-candidate-shared",
   sessionDescriptionShared = "client-session-description-shared",
+  userStoppedVideo = "client-video-stopped",
 }

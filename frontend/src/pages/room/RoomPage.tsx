@@ -18,7 +18,7 @@ import styles from "./RoomPage.module.scss";
 const RoomPage = observer(() => {
   const {
     webRTC,
-    main: { isLoadingPusher, pusherError, userId, isVideo },
+    main: { isLoadingPusher, pusherError, userId },
   } = useMobX();
 
   useWebRTC();
@@ -44,9 +44,9 @@ const RoomPage = observer(() => {
 
   return (
     <div className={styles.wrapper}>
-      {Object.values(webRTC.clients).map(id => (
+      {Object.values(webRTC.clients).map(({ id }) => (
         <div key={id}>
-          {id === userId && !isVideo ? (
+          {!webRTC.clients[id].isVideo ? (
             <VideoPlug className={styles.video} />
           ) : (
             <video

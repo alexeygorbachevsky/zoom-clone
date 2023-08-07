@@ -8,8 +8,6 @@ import {
   setIsRoomJoining,
   setIsLoadingPusher,
   setPusherError,
-  setIsVideo,
-  setIsAudio,
 } from "./actions";
 import { MainState } from "./types";
 
@@ -22,8 +20,6 @@ class MainStore {
   userId: MainState["userId"] = null;
   isLoadingPusher: MainState["isLoadingPusher"] = true;
   isRoomJoining: MainState["isRoomJoining"] = false;
-  isVideo: MainState["isVideo"] = true;
-  isAudio: MainState["isAudio"] = true;
 
   constructor(rootStore: RootStoreType) {
     this.rootStore = rootStore;
@@ -36,8 +32,6 @@ class MainStore {
   setIsRoomJoining = setIsRoomJoining;
   setIsLoadingPusher = setIsLoadingPusher;
   setPusherError = setPusherError;
-  setIsVideo = setIsVideo;
-  setIsAudio = setIsAudio;
 }
 
 export default MainStore;

@@ -30,7 +30,9 @@ export const leaveRoom = () => {
   const { webRTC, main } = store;
 
   webRTC.localMediaStream?.getTracks().forEach(track => track.stop());
-  webRTC.remoteMediaStreams[main.userId as string]?.getTracks().forEach(track => track.stop());
+  webRTC.remoteMediaStreams[main.userId as string]
+    ?.getTracks()
+    .forEach(track => track.stop());
 
   webRTC.clearState();
   main.setUserId(null);
@@ -137,7 +139,11 @@ export const onSocketJoin = async ({
     streams: [remoteStream],
   }: RTCTrackEvent) => {
     webRTC.remoteMediaStreams[joinedUserId] = remoteStream;
-    webRTC.clients[joinedUserId] = joinedUserId;
+    webRTC.clients[joinedUserId] = {
+      id: joinedUserId,
+      isVideo: true,
+      isAudio: true,
+    };
   };
 
   webRTC.localMediaStream?.getTracks().forEach(track => {
@@ -191,7 +197,7 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
       video: true,
     });
 
-    webRTC.clients[userId] = userId;
+    webRTC.clients[userId] = { id: userId, isVideo: true, isAudio: true };
 
     const channel = pusher!.channel(CHANNEL) as PresenceChannel;
 
@@ -210,4 +216,15 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
       timeout: 3000,
     });
   }
+};
+
+interface Member {
+  id: string;
+  isVideo: boolean;
+}
+
+export const onStopVideo = ({ id, isVideo }: Member) => {
+  const { webRTC } = store;
+
+  webRTC.clients[id].isVideo = isVideo;
 };

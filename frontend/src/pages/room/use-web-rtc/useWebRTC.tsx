@@ -12,12 +12,13 @@ import {
   onICEShare,
   onSessionDescriptionShare,
   onSocketJoin,
+  onStopVideo,
   onUserRemove,
 } from "./duck/helpers";
 
 const useWebRTC = () => {
   const { roomId } = useParams();
-  const {  main } = useMobX();
+  const { main } = useMobX();
 
   const pusher = main.pusher;
   const userId = main.userId as string;
@@ -41,6 +42,7 @@ const useWebRTC = () => {
     channel.bind(Events.sessionDescriptionShared, onSessionDescriptionShare);
     channel.bind(Events.iceCandidateShared, onICEShare);
     channel.bind(Events.userRemoved, onUserRemove);
+    channel.bind(Events.userStoppedVideo, onStopVideo);
 
     initializeVideo({
       userId,

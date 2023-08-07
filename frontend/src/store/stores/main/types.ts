@@ -7,5 +7,4 @@ export interface MainState {
   isRoomJoining: boolean;
   isLoadingPusher: boolean;
   isAudio: boolean;
-  isVideo: boolean
 }

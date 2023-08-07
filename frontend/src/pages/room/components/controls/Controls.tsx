@@ -12,6 +12,7 @@ import { AlertTypes } from "store/stores/alerts";
 import useMobX from "hooks/use-mobx";
 
 import { ROUTES } from "constants/routes";
+import { CHANNEL, Events } from "constants/web-rtc";
 
 import { leaveRoom } from "../../use-web-rtc/duck/helpers";
 
@@ -22,16 +23,26 @@ const Controls = observer(() => {
   const { main, webRTC, alerts } = useMobX();
   const navigate = useNavigate();
 
-  const { isAudio, isVideo } = main;
+  const userId = main.userId as string;
+  const user = webRTC.clients[userId];
+
+  if (!user) {
+    return null;
+  }
 
   const onMute = () => {
-    webRTC.localMediaStream!.getAudioTracks()[0].enabled = !isAudio;
-    main.setIsAudio(!isAudio);
+    webRTC.localMediaStream!.getAudioTracks()[0].enabled = !user.isAudio;
+    user.isAudio = !user.isAudio;
   };
 
   const onStopVideo = () => {
-    webRTC.localMediaStream!.getVideoTracks()[0].enabled = !isVideo;
-    main.setIsVideo(!isVideo);
+    webRTC.localMediaStream!.getVideoTracks()[0].enabled = !user.isVideo;
+    user.isVideo = !user.isVideo;
+    main.pusher!.send_event(
+      Events.userStoppedVideo,
+      { id: main.userId, isVideo: user.isVideo },
+      CHANNEL,
+    );
   };
 
   const onLeaveRoom = () => {
@@ -53,7 +64,7 @@ const Controls = observer(() => {
     <div className={styles.wrapper}>
       <button
         className={classnames(styles.controlButton, styles.muteButton, {
-          [styles.controlButtonMuted]: !isAudio,
+          [styles.controlButtonMuted]: !user.isAudio,
         })}
         onClick={onMute}
       >
@@ -62,7 +73,7 @@ const Controls = observer(() => {
       </button>
       <button
         className={classnames(styles.controlButton, styles.stopButton, {
-          [styles.controlButtonMuted]: !isVideo,
+          [styles.controlButtonMuted]: !user.isVideo,
         })}
         onClick={onStopVideo}
       >
