@@ -42,11 +42,11 @@ dotenvFiles.forEach(dotenvFile => {
 
 const PUSHER_KEY = process.env.PUSHER_KEY;
 const PUSHER_CLUSTER = process.env.PUSHER_CLUSTER;
+const METERED_NAME = process.env.METERED_NAME;
+const METERED_KEY = process.env.METERED_KEY;
 
-if (!PUSHER_KEY || !PUSHER_CLUSTER) {
-  throw new Error(
-      "The PUSHER_KEY and PUSHER_CLUSTER environment variable is required but was not specified.",
-  );
+if (!PUSHER_KEY || !PUSHER_CLUSTER || !METERED_NAME || !METERED_KEY) {
+  throw new Error("Environment variables are required but was not specified.");
 }
 
 // We support resolving modules according to `NODE_PATH`.
@@ -97,8 +97,10 @@ function getClientEnvironment(publicUrl) {
         // Whether or not react-refresh is enabled.
         // It is defined here so it is available in the webpackHotDevClient.
         FAST_REFRESH: process.env.FAST_REFRESH !== "false",
-        PUSHER_KEY: process.env.PUSHER_KEY,
-        PUSHER_CLUSTER: process.env.PUSHER_CLUSTER,
+        PUSHER_KEY,
+        PUSHER_CLUSTER,
+        METERED_NAME,
+        METERED_KEY,
       },
     );
   // Stringify all values so we can feed into webpack DefinePlugin

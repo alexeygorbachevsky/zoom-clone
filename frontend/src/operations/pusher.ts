@@ -39,7 +39,7 @@ export const initializePusher = ({
   roomId,
   shouldRedirect = true,
 }: JoinRoom) => {
-  const { main } = store;
+  const { main, alerts } = store;
 
   let authPusher: Pusher = null as unknown as Pusher;
 
@@ -48,7 +48,6 @@ export const initializePusher = ({
 
     authPusher.connection.bind("connected", () => {
       const channel = authPusher.subscribe(CHANNEL);
-
 
       // TODO: data ts
       // eslint-disable-next-line
@@ -70,7 +69,18 @@ export const initializePusher = ({
       });
     });
 
-    authPusher.connection.bind("error", () => {
+    authPusher.connection.bind("error", (error: { code: number }) => {
+      // eslint-disable-next-line
+      console.log("error", error);
+
+      if (error.code === 4301) {
+        alerts.addAlert({
+          id: uuid(),
+          type: AlertTypes.error,
+          message: "Rejected client event because of rate limiting",
+          timeout: 3000,
+        });
+      }
       handleError(authPusher);
     });
   } catch (err) {
