@@ -24,6 +24,8 @@ const useWebRTC = () => {
   const userId = main.userId as string;
 
   useEffect(() => {
+    main.roomId = roomId as string;
+
     if (!pusher) {
       initializePusher({
         action: Actions.joinRoom,

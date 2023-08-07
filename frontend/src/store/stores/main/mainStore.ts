@@ -18,6 +18,7 @@ class MainStore {
   pusher: MainState["pusher"] = null;
   pusherError: MainState["pusherError"] = null;
   userId: MainState["userId"] = null;
+  roomId: MainState["roomId"] = null;
   isLoadingPusher: MainState["isLoadingPusher"] = true;
   isRoomJoining: MainState["isRoomJoining"] = false;
 

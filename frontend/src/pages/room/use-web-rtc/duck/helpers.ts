@@ -13,8 +13,15 @@ interface ICEShare {
   iceCandidate: RTCIceCandidate;
 }
 
-export const onICEShare = ({ userId, iceCandidate }: ICEShare) => {
-  const { webRTC } = store;
+export const onICEShare = ({ userId, iceCandidate, roomId }: ICEShare) => {
+  const {
+    webRTC,
+    main: { roomId: currentRoomId },
+  } = store;
+
+  if (currentRoomId !== roomId) {
+    return;
+  }
 
   webRTC.peerConnections[userId].addIceCandidate(
     new RTCIceCandidate(iceCandidate),
@@ -42,10 +49,18 @@ export const leaveRoom = () => {
 
 interface OnUserRemove {
   id: string;
+  info: { roomId: string };
 }
 
-export const onUserRemove = ({ id }: OnUserRemove) => {
-  const { webRTC } = store;
+export const onUserRemove = ({ id, info: { roomId } }: OnUserRemove) => {
+  const {
+    webRTC,
+    main: { roomId: currentRoomId },
+  } = store;
+
+  if (roomId !== currentRoomId) {
+    return;
+  }
 
   webRTC.remoteMediaStreams[id]?.getTracks().forEach(track => track.stop());
   webRTC.peerConnections[id]?.close();
@@ -69,8 +84,12 @@ export const onSessionDescriptionShare = async ({
 }: SessionDescriptionShare) => {
   const {
     webRTC,
-    main: { pusher },
+    main: { pusher, roomId: currentRoomId },
   } = store;
+
+  if (roomId !== currentRoomId) {
+    return;
+  }
 
   await webRTC.peerConnections[userId].setRemoteDescription(
     new RTCSessionDescription(sessionDescription),
@@ -106,10 +125,10 @@ export const onSocketJoin = async ({
 }: onSocketJoin) => {
   const {
     webRTC,
-    main: { pusher },
+    main: { pusher, roomId: currentRoomId },
   } = store;
 
-  if (webRTC.peerConnections[joinedUserId]) {
+  if (webRTC.peerConnections[joinedUserId] || currentRoomId !== roomId) {
     return;
   }
 
@@ -221,10 +240,18 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
 interface Member {
   id: string;
   isVideo: boolean;
+  roomId: string;
 }
 
-export const onStopVideo = ({ id, isVideo }: Member) => {
-  const { webRTC } = store;
+export const onStopVideo = ({ id, isVideo, roomId }: Member) => {
+  const {
+    webRTC,
+    main: { roomId: currentRoomId },
+  } = store;
+
+  if (currentRoomId !== roomId) {
+    return;
+  }
 
   webRTC.clients[id].isVideo = isVideo;
 };

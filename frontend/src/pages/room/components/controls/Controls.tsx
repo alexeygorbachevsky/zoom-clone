@@ -40,7 +40,7 @@ const Controls = observer(() => {
     user.isVideo = !user.isVideo;
     main.pusher!.send_event(
       Events.userStoppedVideo,
-      { id: main.userId, isVideo: user.isVideo },
+      { id: main.userId, isVideo: user.isVideo, roomId },
       CHANNEL,
     );
   };

@@ -4,6 +4,7 @@ export interface MainState {
   pusher: Pusher | null;
   pusherError: string | null;
   userId: string | null;
+  roomId: string | null;
   isRoomJoining: boolean;
   isLoadingPusher: boolean;
   isAudio: boolean;
