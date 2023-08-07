@@ -69,11 +69,11 @@ export const initializePusher = ({
       });
     });
 
-    authPusher.connection.bind("error", (error: { code: number }) => {
+    authPusher.connection.bind("error", (error: {data: { code: number }}) => {
       // eslint-disable-next-line
       console.log("error", error);
 
-      if (error.code === 4301) {
+      if (error.data?.code === 4301) {
         alerts.addAlert({
           id: uuid(),
           type: AlertTypes.error,
