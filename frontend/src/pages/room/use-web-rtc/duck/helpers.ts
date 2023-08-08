@@ -10,22 +10,131 @@ import { CHANNEL, Events } from "constants/web-rtc";
 interface ICEShare {
   roomId: string;
   userId: string;
-  iceCandidate: RTCIceCandidate;
+  receiverId: string;
+  iceCandidate?: RTCIceCandidate;
+  sdp?: RTCSessionDescription;
+  shouldCreateOffer?: boolean;
 }
 
-export const onICEShare = ({ userId, iceCandidate, roomId }: ICEShare) => {
+// create offer -> set local -> set remote -> create answer -> set local -> set remote
+export const onICEShare = async ({
+  userId,
+  receiverId,
+  roomId,
+  shouldCreateOffer,
+  iceCandidate,
+  sdp,
+}: ICEShare) => {
   const {
     webRTC,
-    main: { roomId: currentRoomId },
+    main: { roomId: currentRoomId, userId: currentUserId, pusher },
   } = store;
 
-  if (currentRoomId !== roomId) {
+  if (currentRoomId !== roomId || receiverId !== currentUserId) {
     return;
   }
 
-  webRTC.peerConnections[userId].addIceCandidate(
-    new RTCIceCandidate(iceCandidate),
+  const sessionDescription = {} as { current: RTCSessionDescription };
+
+  if (!webRTC.peerConnections[userId]) {
+    webRTC.peerConnections[userId] = new RTCPeerConnection({
+      // https://dashboard.metered.ca/
+      iceServers: [
+        ...freeice(),
+        {
+          urls: "stun:stun.relay.metered.ca:80",
+        },
+        {
+          urls: "turn:a.relay.metered.ca:80",
+          username: process.env.METERED_NAME,
+          credential: process.env.METERED_KEY,
+        },
+        // {
+        //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
+        //   username: process.env.METERED_NAME,
+        //   credential: process.env.METERED_KEY,
+        // },
+        // {
+        //   urls: "turn:a.relay.metered.ca:443",
+        //   username: process.env.METERED_NAME,
+        //   credential: process.env.METERED_KEY,
+        // },
+        // {
+        //   urls: "turn:a.relay.metered.ca:443?transport=tcp",
+        //   username: process.env.METERED_NAME,
+        //   credential: process.env.METERED_KEY,
+        // },
+      ],
+    });
+
+    webRTC.peerConnections[userId].onicecandidate = (
+      event: RTCPeerConnectionIceEvent,
+    ) => {
+      const iceCandidate = event.candidate;
+
+      if (iceCandidate) {
+        pusher!.send_event(
+          Events.iceCandidateShared,
+          {
+            roomId,
+            userId: currentUserId,
+            receiverId: userId,
+            iceCandidate,
+            sdp: sessionDescription.current,
+          },
+          CHANNEL,
+        );
+      }
+    };
+
+    // let tracksCount = 0;
+    webRTC.peerConnections[userId].ontrack = ({
+      streams: [remoteStream],
+    }: RTCTrackEvent) => {
+      // tracksCount += 1;
+
+      // if (tracksCount === 2) {
+      webRTC.remoteMediaStreams[userId] = remoteStream;
+      webRTC.clients[userId] = {
+        id: userId,
+        isVideo: true,
+        isAudio: true,
+      };
+      // }
+    };
+
+    webRTC.localMediaStream?.getTracks().forEach(track => {
+      webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream);
+    });
+  }
+
+  if (iceCandidate) {
+    webRTC.peerConnections[userId].addIceCandidate(
+      new RTCIceCandidate(iceCandidate),
+    );
+  }
+
+  if (shouldCreateOffer) {
+    const offer = await webRTC.peerConnections[userId].createOffer();
+
+    sessionDescription.current = offer;
+
+    await webRTC.peerConnections[userId].setLocalDescription(offer);
+
+    return;
+  }
+
+  await webRTC.peerConnections[userId].setRemoteDescription(
+    new RTCSessionDescription(sdp!),
   );
+
+  if (sdp?.type === "offer") {
+    const answer = await webRTC.peerConnections[userId].createAnswer();
+
+    sessionDescription.current = answer;
+
+    await webRTC.peerConnections[userId].setLocalDescription(answer);
+  }
 };
 
 interface OnUserRemove {
@@ -71,137 +180,6 @@ export const onUserRemove = ({ id, info: { roomId } }: OnUserRemove) => {
   delete webRTC.remoteMediaStreams[id];
 };
 
-export interface SessionDescriptionShare {
-  roomId: string;
-  userId: string;
-  sessionDescription?: RTCSessionDescriptionInit;
-  shouldCreateOffer?: boolean;
-}
-
-export const onSessionDescriptionShare = async ({
-  roomId,
-  userId,
-  sessionDescription,
-  shouldCreateOffer,
-}: SessionDescriptionShare) => {
-  const {
-    webRTC,
-    main: { pusher, roomId: currentRoomId, userId: currentUserId },
-  } = store;
-
-  if (currentRoomId !== roomId) {
-    return;
-  }
-
-  if (!webRTC.peerConnections[userId]) {
-    webRTC.peerConnections[userId] = new RTCPeerConnection({
-      // https://dashboard.metered.ca/
-      iceServers: [
-        ...freeice(),
-        {
-          urls: "stun:stun.relay.metered.ca:80",
-        },
-        {
-          urls: "turn:a.relay.metered.ca:80",
-          username: process.env.METERED_NAME,
-          credential: process.env.METERED_KEY,
-        },
-        // {
-        //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
-        //   username: process.env.METERED_NAME,
-        //   credential: process.env.METERED_KEY,
-        // },
-        // {
-        //   urls: "turn:a.relay.metered.ca:443",
-        //   username: process.env.METERED_NAME,
-        //   credential: process.env.METERED_KEY,
-        // },
-        // {
-        //   urls: "turn:a.relay.metered.ca:443?transport=tcp",
-        //   username: process.env.METERED_NAME,
-        //   credential: process.env.METERED_KEY,
-        // },
-      ],
-    });
-
-    webRTC.peerConnections[userId].onicecandidate = (
-      event: RTCPeerConnectionIceEvent,
-    ) => {
-      const iceCandidate = event.candidate;
-
-      if (iceCandidate) {
-        pusher!.send_event(
-          Events.iceCandidateShared,
-          {
-            roomId,
-            userId: currentUserId,
-            iceCandidate,
-          },
-          CHANNEL,
-        );
-      }
-    };
-
-    // let tracksCount = 0;
-    webRTC.peerConnections[userId].ontrack = ({
-      streams: [remoteStream],
-    }: RTCTrackEvent) => {
-      // tracksCount += 1;
-
-      // if (tracksCount === 2) {
-      webRTC.remoteMediaStreams[userId] = remoteStream;
-      webRTC.clients[userId] = {
-        id: userId,
-        isVideo: true,
-        isAudio: true,
-      };
-      // }
-    };
-
-    webRTC.localMediaStream?.getTracks().forEach(track => {
-      webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream);
-    });
-  }
-
-  if (shouldCreateOffer) {
-    const offer = await webRTC.peerConnections[userId].createOffer();
-
-    pusher!.send_event(
-      Events.sessionDescriptionShared,
-      {
-        roomId,
-        userId: currentUserId,
-        sessionDescription: offer,
-      },
-      CHANNEL,
-    );
-
-    await webRTC.peerConnections[userId].setLocalDescription(offer);
-
-    return;
-  }
-
-  await webRTC.peerConnections[userId].setRemoteDescription(
-    new RTCSessionDescription(sessionDescription!),
-  );
-
-  if (sessionDescription?.type === "offer") {
-    const answer = await webRTC.peerConnections[userId].createAnswer();
-
-    pusher!.send_event(
-      Events.sessionDescriptionShared,
-      {
-        roomId,
-        userId: currentUserId,
-        sessionDescription: answer,
-      },
-      CHANNEL,
-    );
-
-    await webRTC.peerConnections[userId].setLocalDescription(answer);
-  }
-};
-
 interface Member {
   id: string;
   info: { roomId: string };
@@ -238,10 +216,11 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
     }
 
     channel.members.each(({ id, info }: Member) => {
-      if (info.roomId === roomId && userId !== id) {
-        onSessionDescriptionShare({
+      if (info.roomId === roomId) {
+        onICEShare({
           roomId,
           userId: id,
+          receiverId: userId,
           shouldCreateOffer: true,
         });
       }

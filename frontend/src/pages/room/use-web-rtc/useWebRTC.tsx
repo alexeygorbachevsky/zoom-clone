@@ -10,7 +10,6 @@ import {
   initializeVideo,
   leaveRoom,
   onICEShare,
-  onSessionDescriptionShare,
   onStopVideo,
   onUserRemove,
 } from "./duck/helpers";
@@ -43,7 +42,6 @@ const useWebRTC = () => {
 
     const channel = pusher.channel(CHANNEL);
 
-    channel.bind(Events.sessionDescriptionShared, onSessionDescriptionShare);
     channel.bind(Events.iceCandidateShared, onICEShare);
     channel.bind(Events.userRemoved, onUserRemove);
     channel.bind(Events.userStoppedVideo, onStopVideo);
