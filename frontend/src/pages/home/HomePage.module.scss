@@ -29,6 +29,10 @@
       min-height: 600px;
     }
 
+    @include smaller-than-or-equal("tabletSmall") {
+      min-height: unset;
+    }
+
     h1 {
       font-weight: 600;
       width: 510px;

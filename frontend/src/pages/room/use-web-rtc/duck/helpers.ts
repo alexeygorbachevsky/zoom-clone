@@ -258,7 +258,7 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
       id: uuid(),
       message: "Video initialization error",
       type: AlertTypes.error,
-      timeout: 3000,
+      timeout: 5000,
     });
   }
 };

@@ -16,22 +16,29 @@ interface JoinRoom {
   shouldRedirect?: boolean;
 }
 
-const handleError = (pusher: Pusher) => {
+const handleError = (pusher: Pusher, isRateLimits?: boolean) => {
   const { main, alerts } = store;
 
   alerts.addAlert({
     id: uuid(),
     type: AlertTypes.error,
-    message: "Error is occurred. Please try again.",
-    timeout: 3000,
+    message: isRateLimits
+      ? "Rejected client event because of rate limiting."
+      : "Error is occurred. Please try again.",
+    timeout: 5000,
   });
-  main.setPusher(null);
-  main.setUserId(null);
-  main.setPusherError("Error is occured");
-  main.setIsRoomJoining(false);
-  main.setIsLoadingPusher(false);
 
-  pusher.disconnect();
+  // sometimes Pusher send a lot of messages that cause rate limits error,
+  // but we don't want to stop app working in this case
+  if (!isRateLimits) {
+    main.setPusher(null);
+    main.setUserId(null);
+    main.setPusherError("Error is occured");
+    main.setIsRoomJoining(false);
+    main.setIsLoadingPusher(false);
+
+    pusher.disconnect();
+  }
 };
 
 export const initializePusher = ({
@@ -39,7 +46,7 @@ export const initializePusher = ({
   roomId,
   shouldRedirect = true,
 }: JoinRoom) => {
-  const { main, alerts } = store;
+  const { main } = store;
 
   let authPusher: Pusher = null as unknown as Pusher;
 
@@ -69,19 +76,13 @@ export const initializePusher = ({
       });
     });
 
-    authPusher.connection.bind("error", (error: {data: { code: number }}) => {
-      // eslint-disable-next-line
-      console.log("error", error);
-
+    authPusher.connection.bind("error", (error: { data: { code: number } }) => {
+      let isRateLimits = false;
       if (error.data?.code === 4301) {
-        alerts.addAlert({
-          id: uuid(),
-          type: AlertTypes.error,
-          message: "Rejected client event because of rate limiting",
-          timeout: 3000,
-        });
+        isRateLimits = true;
       }
-      handleError(authPusher);
+
+      handleError(authPusher, isRateLimits);
     });
   } catch (err) {
     handleError(authPusher);

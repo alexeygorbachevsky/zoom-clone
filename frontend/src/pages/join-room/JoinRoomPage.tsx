@@ -25,13 +25,15 @@ const JoinRoomPage = observer(() => {
   const { main } = useMobX();
   const { isRoomJoining } = main;
 
+  const isJoinButtonDisabled = !roomId || isRoomJoining;
+
   const onRoomIdChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsRoomIdError(false);
     setRoomId(e.target.value);
   };
 
   const onJoinRoom = () => {
-    if (isRoomJoining) {
+    if (isJoinButtonDisabled) {
       return;
     }
 
@@ -70,9 +72,9 @@ const JoinRoomPage = observer(() => {
         />
         <Button
           as={Link}
-          disabled={!roomId || isRoomJoining}
+          disabled={isJoinButtonDisabled}
           className={classnames(styles.button, {
-            [styles.disabledButton]: !roomId,
+            [styles.disabledButton]: isJoinButtonDisabled,
           })}
           onClick={onJoinRoom}
         >

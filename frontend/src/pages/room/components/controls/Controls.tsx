@@ -55,8 +55,8 @@ const Controls = observer(() => {
     alerts.addAlert({
       type: AlertTypes.success,
       id: uuid(),
-      message: "Room id successfully copied",
-      timeout: 2000,
+      message: "Room id copied",
+      timeout: 3000,
     });
   };
 

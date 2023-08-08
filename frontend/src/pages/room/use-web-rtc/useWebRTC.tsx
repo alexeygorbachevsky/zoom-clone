@@ -24,6 +24,10 @@ const useWebRTC = () => {
   const userId = main.userId as string;
 
   useEffect(() => {
+    if (main.pusherError) {
+      return;
+    }
+
     main.roomId = roomId as string;
 
     if (!pusher) {

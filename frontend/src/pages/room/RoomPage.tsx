@@ -8,6 +8,8 @@ import Template from "components/template";
 
 import VideoPlug from "assets/images/video-plug.svg";
 
+import Button from "basics/button";
+
 import Controls from "./components/controls";
 
 import useWebRTC from "./use-web-rtc/useWebRTC";
@@ -36,6 +38,15 @@ const RoomPage = observer(() => {
       <Template>
         <div className={styles.errorWrapper}>
           <p className={styles.error}>Error is occurred!</p>
+          <p className={styles.error}>Please try again.</p>
+          <Button
+              className={styles.reloadButton}
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Reload Page
+          </Button>
         </div>
         <Alerts />
       </Template>

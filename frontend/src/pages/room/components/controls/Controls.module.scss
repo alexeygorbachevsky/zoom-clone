@@ -95,6 +95,8 @@
 
     @include smaller-than-or-equal("mobileMedium") {
       margin-left: 12px;
+      height: 32px;
+      width: 100%;
     }
 
 

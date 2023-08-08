@@ -4,7 +4,7 @@
 @import "styles/mixins";
 
 .wrapper {
-  margin-top: calc($headerHeight + 112px);
+  height: calc(100vh - $headerHeight);
   padding: 0 32px;
   flex: auto;
   display: flex;
