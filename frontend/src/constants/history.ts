@@ -1,11 +1,11 @@
 import { Location, NavigateFunction } from "react-router-dom";
 
-interface History {
+interface IHistory {
   navigate: NavigateFunction | null;
   location: Location | null;
 }
 
-export const history: History = {
+export const HISTORY: IHistory = {
   navigate: null,
   location: null,
 };

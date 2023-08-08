@@ -13,18 +13,23 @@
   background-color: #19191a;
 
   @include smaller-than-or-equal("mobileMedium") {
-    padding: 48px 32px 104px;
+    padding: 48px 32px 172px;
   }
 
-  .video {
-    height: 300px;
-    width: 400px;
-    object-fit: cover;
-
+  .videoWrapper{
     @include smaller-than-or-equal("mobileMedium") {
       width: 100%;
     }
 
+    .video {
+      height: 300px;
+      width: 400px;
+      object-fit: cover;
+
+      @include smaller-than-or-equal("mobileMedium") {
+        width: 100%;
+      }
+    }
   }
 }
 

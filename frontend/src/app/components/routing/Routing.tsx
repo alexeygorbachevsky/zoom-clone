@@ -6,7 +6,7 @@ import Template from "components/template";
 
 import { ROUTES } from "constants/routes";
 
-import { history } from "helpers/history";
+import { HISTORY } from "constants/history";
 
 import HomePage from "pages/home";
 import JoinRoomPage from "pages/join-room";
@@ -20,7 +20,7 @@ const RoomPage = lazy(
 );
 
 const Routing = () => {
-  history.navigate = useNavigate();
+  HISTORY.navigate = useNavigate();
 
   return (
     <Suspense fallback={<Loader />}>

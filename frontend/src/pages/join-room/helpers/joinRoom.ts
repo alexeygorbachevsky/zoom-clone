@@ -2,9 +2,9 @@ import { Actions, CHANNEL } from "constants/web-rtc";
 
 import { MainStore } from "store/stores";
 
-import getPusher from "helpers/pusher";
-import { history } from "helpers/history";
+import { getPusher } from "operations/pusher";
 
+import { HISTORY } from "constants/history";
 import { ROUTES } from "constants/routes";
 
 const joinRoom = ({
@@ -40,13 +40,9 @@ const joinRoom = ({
         main.setPusher(authPusher);
         main.setUserId(data.me.id);
 
-
-        history.navigate!(
-          `/${ROUTES.room}/${data.me.info.roomId}`,
-          {
-            replace: true,
-          },
-        );
+        HISTORY.navigate!(`/${ROUTES.room}/${data.me.info.roomId}`, {
+          replace: true,
+        });
       });
 
       channel.bind("pusher:subscription_error", () => {

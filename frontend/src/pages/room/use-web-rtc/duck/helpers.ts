@@ -74,144 +74,131 @@ export const onUserRemove = ({ id, info: { roomId } }: OnUserRemove) => {
 export interface SessionDescriptionShare {
   roomId: string;
   userId: string;
-  sessionDescription: RTCSessionDescriptionInit;
+  sessionDescription?: RTCSessionDescriptionInit;
+  shouldCreateOffer?: boolean;
 }
 
 export const onSessionDescriptionShare = async ({
   roomId,
   userId,
   sessionDescription,
+  shouldCreateOffer,
 }: SessionDescriptionShare) => {
   const {
     webRTC,
-    main: { pusher, roomId: currentRoomId },
+    main: { pusher, roomId: currentRoomId, userId: currentUserId },
   } = store;
 
-  if (roomId !== currentRoomId) {
+  if (currentRoomId !== roomId) {
     return;
   }
 
-  await webRTC.peerConnections[userId].setRemoteDescription(
-    new RTCSessionDescription(sessionDescription),
-  );
-
-  if (sessionDescription.type === "offer") {
-    const answer = await webRTC.peerConnections[userId].createAnswer();
-
-    await webRTC.peerConnections[userId].setLocalDescription(answer);
-
-    pusher!.send_event(
-      Events.sessionDescriptionShared,
-      {
-        roomId,
-        userId,
-        sessionDescription: answer,
-      },
-      CHANNEL,
-    );
-  }
-};
-
-export interface onSocketJoin {
-  roomId: string;
-  userId: string;
-  shouldCreateOffer?: boolean;
-}
-
-export const onSocketJoin = async ({
-  roomId,
-  userId: joinedUserId,
-  shouldCreateOffer = false,
-}: onSocketJoin) => {
-  const {
-    webRTC,
-    main: { pusher, roomId: currentRoomId },
-  } = store;
-
-  if (webRTC.peerConnections[joinedUserId] || currentRoomId !== roomId) {
-    return;
-  }
-
-  webRTC.peerConnections[joinedUserId] = new RTCPeerConnection({
-    // https://dashboard.metered.ca/
-    iceServers: [
-      ...freeice(),
-      {
-        urls: "stun:stun.relay.metered.ca:80",
-      },
-      {
-        urls: "turn:a.relay.metered.ca:80",
-        username: process.env.METERED_NAME,
-        credential: process.env.METERED_KEY,
-      },
-      // {
-      //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
-      //   username: process.env.METERED_NAME,
-      //   credential: process.env.METERED_KEY,
-      // },
-      // {
-      //   urls: "turn:a.relay.metered.ca:443",
-      //   username: process.env.METERED_NAME,
-      //   credential: process.env.METERED_KEY,
-      // },
-      // {
-      //   urls: "turn:a.relay.metered.ca:443?transport=tcp",
-      //   username: process.env.METERED_NAME,
-      //   credential: process.env.METERED_KEY,
-      // },
-    ],
-  });
-
-  webRTC.peerConnections[joinedUserId].onicecandidate = (
-    event: RTCPeerConnectionIceEvent,
-  ) => {
-    const iceCandidate = event.candidate;
-
-    if (iceCandidate) {
-      pusher!.send_event(
-        Events.iceCandidateShared,
+  if (!webRTC.peerConnections[userId]) {
+    webRTC.peerConnections[userId] = new RTCPeerConnection({
+      // https://dashboard.metered.ca/
+      iceServers: [
+        ...freeice(),
         {
-          roomId,
-          userId: joinedUserId,
-          iceCandidate,
+          urls: "stun:stun.relay.metered.ca:80",
         },
-        CHANNEL,
-      );
-    }
-  };
+        {
+          urls: "turn:a.relay.metered.ca:80",
+          username: process.env.METERED_NAME,
+          credential: process.env.METERED_KEY,
+        },
+        // {
+        //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
+        //   username: process.env.METERED_NAME,
+        //   credential: process.env.METERED_KEY,
+        // },
+        // {
+        //   urls: "turn:a.relay.metered.ca:443",
+        //   username: process.env.METERED_NAME,
+        //   credential: process.env.METERED_KEY,
+        // },
+        // {
+        //   urls: "turn:a.relay.metered.ca:443?transport=tcp",
+        //   username: process.env.METERED_NAME,
+        //   credential: process.env.METERED_KEY,
+        // },
+      ],
+    });
 
-  webRTC.peerConnections[joinedUserId].ontrack = ({
-    streams: [remoteStream],
-  }: RTCTrackEvent) => {
-    webRTC.remoteMediaStreams[joinedUserId] = remoteStream;
-    webRTC.clients[joinedUserId] = {
-      id: joinedUserId,
-      isVideo: true,
-      isAudio: true,
+    webRTC.peerConnections[userId].onicecandidate = (
+      event: RTCPeerConnectionIceEvent,
+    ) => {
+      const iceCandidate = event.candidate;
+
+      if (iceCandidate) {
+        pusher!.send_event(
+          Events.iceCandidateShared,
+          {
+            roomId,
+            userId: currentUserId,
+            iceCandidate,
+          },
+          CHANNEL,
+        );
+      }
     };
-  };
 
-  webRTC.localMediaStream?.getTracks().forEach(track => {
-    webRTC.peerConnections[joinedUserId].addTrack(
-      track,
-      webRTC.localMediaStream,
-    );
-  });
+    // let tracksCount = 0;
+    webRTC.peerConnections[userId].ontrack = ({
+      streams: [remoteStream],
+    }: RTCTrackEvent) => {
+      // tracksCount += 1;
+
+      // if (tracksCount === 2) {
+      webRTC.remoteMediaStreams[userId] = remoteStream;
+      webRTC.clients[userId] = {
+        id: userId,
+        isVideo: true,
+        isAudio: true,
+      };
+      // }
+    };
+
+    webRTC.localMediaStream?.getTracks().forEach(track => {
+      webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream);
+    });
+  }
 
   if (shouldCreateOffer) {
-    const offer = await webRTC.peerConnections[joinedUserId].createOffer();
-
-    await webRTC.peerConnections[joinedUserId].setLocalDescription(offer);
+    const offer = await webRTC.peerConnections[userId].createOffer();
 
     pusher!.send_event(
       Events.sessionDescriptionShared,
       {
         roomId,
-        userId: joinedUserId,
+        userId: currentUserId,
         sessionDescription: offer,
       },
       CHANNEL,
     );
+
+    await webRTC.peerConnections[userId].setLocalDescription(offer);
+
+    return;
+  }
+
+  await webRTC.peerConnections[userId].setRemoteDescription(
+    new RTCSessionDescription(sessionDescription!),
+  );
+
+  if (sessionDescription?.type === "offer") {
+    const answer = await webRTC.peerConnections[userId].createAnswer();
+
+    pusher!.send_event(
+      Events.sessionDescriptionShared,
+      {
+        roomId,
+        userId: currentUserId,
+        sessionDescription: answer,
+      },
+      CHANNEL,
+    );
+
+    await webRTC.peerConnections[userId].setLocalDescription(answer);
   }
 };
 
@@ -246,17 +233,24 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
 
     const channel = pusher!.channel(CHANNEL) as PresenceChannel;
 
+    if (channel.members.count === 1) {
+      return;
+    }
+
     channel.members.each(({ id, info }: Member) => {
-      if (info.roomId === roomId) {
-        onSocketJoin({ roomId, userId: id, shouldCreateOffer: true });
+      if (info.roomId === roomId && userId !== id) {
+        onSessionDescriptionShare({
+          roomId,
+          userId: id,
+          shouldCreateOffer: true,
+        });
       }
     });
-
-    pusher!.send_event(Events.userJoined, { roomId, userId }, CHANNEL);
   } catch (err) {
     alerts.addAlert({
       id: uuid(),
-      message: "Video initialization error",
+      message:
+        "Video initialization error. Possibly you have blocked camera or micro",
       type: AlertTypes.error,
       timeout: 5000,
     });

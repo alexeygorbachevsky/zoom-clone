@@ -7,8 +7,36 @@ import { ROUTES } from "constants/routes";
 import { store } from "store";
 import { AlertTypes } from "store/stores/alerts";
 
-import getPusher from "helpers/pusher";
-import { history } from "helpers/history";
+import fetchAuthToken from "api/fetchAuthToken";
+
+import { HISTORY } from "constants/history";
+
+interface Args {
+  action?: string;
+  roomId?: string;
+}
+
+export const getPusher = ({ action, roomId }: Args) =>
+  new Pusher(process.env.PUSHER_KEY!, {
+    authorizer: channel => ({
+      authorize: async (socketId, callback) => {
+        try {
+          const data = await fetchAuthToken({
+            channelName: channel.name,
+            roomId,
+            socketId,
+            action,
+          });
+          callback(null, data);
+        } catch (err) {
+          const error = err as Error;
+          callback(error, null);
+        }
+      },
+    }),
+    cluster: process.env.PUSHER_CLUSTER!,
+    forceTLS: true,
+  });
 
 interface JoinRoom {
   action: Actions;
@@ -65,7 +93,7 @@ export const initializePusher = ({
         main.setIsLoadingPusher(false);
 
         if (shouldRedirect) {
-          history.navigate!(`/${ROUTES.room}/${data.me.info.roomId}`, {
+          HISTORY.navigate!(`/${ROUTES.room}/${data.me.info.roomId}`, {
             replace: true,
           });
         }

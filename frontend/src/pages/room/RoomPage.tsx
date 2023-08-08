@@ -40,7 +40,7 @@ const RoomPage = observer(() => {
           <p className={styles.error}>Error is occurred!</p>
           <p className={styles.error}>Please try again.</p>
           <Button
-              className={styles.reloadButton}
+            className={styles.reloadButton}
             onClick={() => {
               window.location.reload();
             }}
@@ -56,14 +56,20 @@ const RoomPage = observer(() => {
   return (
     <div className={styles.wrapper}>
       {Object.values(webRTC.clients).map(({ id }) => (
-        <div key={id}>
+        <div key={id} className={styles.videoWrapper}>
           {!webRTC.clients[id].isVideo ? (
             <VideoPlug className={styles.video} />
           ) : (
             <video
               className={styles.video}
+              // TODO:
               ref={node =>
-                setVideo({ id, node, webRTC, myId: userId as string })
+                setVideo({
+                  id,
+                  node,
+                  webRTC,
+                  myId: userId as string,
+                })
               }
               id={id}
               autoPlay
