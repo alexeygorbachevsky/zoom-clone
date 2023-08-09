@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "zoom-clone-frontend",
+  "version": "1.0.1",
   "private": true,
   "engines": {
     "node": ">= 18.13.0",

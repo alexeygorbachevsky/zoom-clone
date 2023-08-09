@@ -1,63 +1,40 @@
-# Express TypeScript template
+# Zoom clone backend
 
-# Pre-reqs
+## Deploy
 
-// ngrok http 5001
-// taskkill /f /im ngrok.exe
+- https://zoom-clone-backend-alexeygorbachevskiy.vercel.app/
 
-- Install [Node.js](https://nodejs.org/en/)
-- Install [VS Code](https://code.visualstudio.com/)
+## Prerequisites
 
-# Getting started
+- Git - [Download & Install Git](https://git-scm.com/downloads).
+- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
-- Clone the repository
-
-```
-git clone https://github.com/greenroach/express-ts-template.git
-```
-
-- Install dependencies
+## Downloading
 
 ```
-cd <project_name>
-npm install
+git clone {repository URL}
 ```
 
-- Build and run the project
+## Installing
 
 ```
-npm run build
-npm start
+1. yarn install
+2. yarn start
+3. configure SSL certificate as described below
+4. Create channel with name "zoom-clone" via Pusher. See https://dashboard.pusher.com/.
+5. Create DB via Redis -> https://app.redislabs.com/
+6. Rename .env.example file to .env and fill in all blanks.
 ```
 
-Navigate to `http://localhost:3000`
+## Configure SSL
+To run the application locally, you should configure ssl, since the service worker will not work without it.
+You need to create a `.cert` folder in the root directory of the repo and put `cert.pem` and `key.pem` in it.
+See links below for ssl configuration.
 
-### Using the debugger in VS Code
-
-Debugging is one of the places where VS Code really shines over other editors.
-Node.js debugging in VS Code is easy to setup and even easier to use.
-This project comes pre-configured with everything you need to get started.
-
-When you hit `F5` in VS Code, it looks for a top level `.vscode` folder with a `launch.json` file.
-In this file, you can tell VS Code exactly what you want to do:
-
-```json
-{
-  "type": "node",
-  "request": "attach",
-  "name": "Attach by Process ID",
-  "processId": "${command:PickProcess}",
-  "protocol": "inspector"
-}
+### SSL configuration links
+- https://github.com/FiloSottile/mkcert
+- https://chocolatey.org/install
+- https://www.freecodecamp.org/news/how-to-set-up-https-locally-with-create-react-app/
 ```
-
-This is mostly identical to the "Node.js: Attach by Process ID" template with one minor change.
-We added `"protocol": "inspector"` which tells VS Code that we're using the latest version of Node which uses a new debug protocol.
-
-With this file in place, you can hit `F5` to attach a debugger.
-You will probably have multiple node processes running, so you need to find the one that shows `node dist/server.js`.
-Now just set your breakpoints and go!
-
----
-
-Based on [TypeScript Node Starter](https://github.com/Microsoft/TypeScript-Node-Starter) and [Express Generator](https://github.com/expressjs/generator)
+For firefox: mkcert -CAROOT. Check location of rootCA.crt and import it manually to firefox certificates
+``` 

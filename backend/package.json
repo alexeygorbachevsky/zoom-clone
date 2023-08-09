@@ -1,6 +1,6 @@
 {
   "name": "zoom-clone-backend",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "Zoom clone backend",
   "scripts": {
     "build": "npm run build-ts",

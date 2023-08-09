@@ -1,36 +1,39 @@
-# React starter kit
+# Zoom clone frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Deploy
 
-## Available Scripts
+- https://zoom-clone-frontend-alexeygorbachevskiy.vercel.app/
 
-In the project directory, you can run:
+## Prerequisites
 
-### `yarn start`
+- Git - [Download & Install Git](https://git-scm.com/downloads).
+- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Downloading
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+git clone {repository URL}
+```
 
-### `yarn test`
+## Installing
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+1. yarn install
+2. yarn start
+3. Configure SSL certificate as described below.
+4. Create channel with name "zoom-clone" via Pusher. See https://dashboard.pusher.com/.
+5. Create account in https://dashboard.metered.ca/ for TURN server using.
+6. Rename .env.example file to .env and fill in all blanks.
+```
 
-### `yarn build`
+## Configure SSL
+You need to create a `.cert` folder in the root directory of the repo and put `cert.pem` and `key.pem` in it.
+See links below for ssl configuration.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### SSL configuration links
+- https://github.com/FiloSottile/mkcert
+- https://chocolatey.org/install
+- https://www.freecodecamp.org/news/how-to-set-up-https-locally-with-create-react-app/
+```
+For firefox: mkcert -CAROOT. Check location of rootCA.crt and import it manually to firefox certificates
+``` 
