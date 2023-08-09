@@ -36,9 +36,10 @@ const Controls = observer(() => {
   };
 
   const onStopVideo = () => {
-    webRTC.localMediaStream!.getVideoTracks()[0].enabled = !user.isVideo;
-    webRTC.localMediaStream!.getAudioTracks()[0].enabled = true;
     user.isVideo = !user.isVideo;
+    // TODO: Don't actually stop video cause audio will be stopped too.
+    //  The best option for this is create separate streams for audio and video
+    // webRTC.localMediaStream!.getVideoTracks()[0].enabled = user.isVideo;
     main.pusher!.send_event(
       Events.userStoppedVideo,
       { id: main.userId, isVideo: user.isVideo, roomId },
