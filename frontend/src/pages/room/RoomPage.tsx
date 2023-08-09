@@ -1,4 +1,5 @@
 import { observer } from "mobx-react-lite";
+import classnames from "classnames";
 
 import useMobX from "hooks/use-mobx";
 
@@ -57,25 +58,26 @@ const RoomPage = observer(() => {
     <div className={styles.wrapper}>
       {Object.values(webRTC.clients).map(({ id }) => (
         <div key={id} className={styles.videoWrapper}>
-          {!webRTC.clients[id].isVideo ? (
+          {!webRTC.clients[id].isVideo && (
             <VideoPlug className={styles.video} />
-          ) : (
-            <video
-              className={styles.video}
-              ref={node =>
-                setVideo({
-                  id,
-                  node,
-                  webRTC,
-                  myId: userId as string,
-                })
-              }
-              id={id}
-              autoPlay
-              playsInline
-              muted={id === userId}
-            />
           )}
+          <video
+            className={classnames(styles.video, {
+              [styles.noVideo]: !webRTC.clients[id].isVideo,
+            })}
+            ref={node =>
+              setVideo({
+                id,
+                node,
+                webRTC,
+                myId: userId as string,
+              })
+            }
+            id={id}
+            autoPlay
+            playsInline
+            muted={id === userId}
+          />
         </div>
       ))}
       <Controls />

@@ -30,6 +30,11 @@
         width: 100%;
       }
     }
+    .noVideo{
+      position: absolute;
+      top: -100%;
+      visibility: hidden;
+    }
   }
 }
 
