@@ -62,7 +62,6 @@ const RoomPage = observer(() => {
           ) : (
             <video
               className={styles.video}
-              // TODO:
               ref={node =>
                 setVideo({
                   id,

@@ -37,6 +37,7 @@ const Controls = observer(() => {
 
   const onStopVideo = () => {
     webRTC.localMediaStream!.getVideoTracks()[0].enabled = !user.isVideo;
+    webRTC.localMediaStream!.getAudioTracks()[0].enabled = true;
     user.isVideo = !user.isVideo;
     main.pusher!.send_event(
       Events.userStoppedVideo,

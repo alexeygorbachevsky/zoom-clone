@@ -1,11 +1,11 @@
 import { PresenceChannel } from "pusher-js";
-import freeice from "freeice";
 import { v4 as uuid } from "uuid";
 
 import { store } from "store";
 import { AlertTypes } from "store/stores/alerts";
 
 import { CHANNEL, Events } from "constants/web-rtc";
+import { ICE_SERVERS } from "./constants";
 
 interface ICEShare {
   roomId: string;
@@ -38,33 +38,7 @@ export const onICEShare = async ({
 
   if (!webRTC.peerConnections[userId]) {
     webRTC.peerConnections[userId] = new RTCPeerConnection({
-      // https://dashboard.metered.ca/
-      iceServers: [
-        ...freeice(),
-        {
-          urls: "stun:stun.relay.metered.ca:80",
-        },
-        {
-          urls: "turn:a.relay.metered.ca:80",
-          username: process.env.METERED_NAME,
-          credential: process.env.METERED_KEY,
-        },
-        // {
-        //   urls: "turn:a.relay.metered.ca:80?transport=tcp",
-        //   username: process.env.METERED_NAME,
-        //   credential: process.env.METERED_KEY,
-        // },
-        // {
-        //   urls: "turn:a.relay.metered.ca:443",
-        //   username: process.env.METERED_NAME,
-        //   credential: process.env.METERED_KEY,
-        // },
-        // {
-        //   urls: "turn:a.relay.metered.ca:443?transport=tcp",
-        //   username: process.env.METERED_NAME,
-        //   credential: process.env.METERED_KEY,
-        // },
-      ],
+      iceServers: ICE_SERVERS,
     });
 
     webRTC.peerConnections[userId].onicecandidate = (
