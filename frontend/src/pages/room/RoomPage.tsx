@@ -14,7 +14,7 @@ import Button from "basics/button";
 import Controls from "./components/controls";
 
 import useWebRTC from "./use-web-rtc/useWebRTC";
-import { setVideo } from "./duck/helpers";
+import { setVideo } from "./duck/operations";
 
 import styles from "./RoomPage.module.scss";
 
@@ -62,6 +62,7 @@ const RoomPage = observer(() => {
             <VideoPlug className={styles.video} />
           )}
           <video
+            controls
             className={classnames(styles.video, {
               [styles.noVideo]: !webRTC.clients[id].isVideo,
             })}

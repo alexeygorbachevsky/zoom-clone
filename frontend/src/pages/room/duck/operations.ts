@@ -8,13 +8,13 @@ interface SetVideo {
 }
 
 export const setVideo = ({ id, node, webRTC, myId }: SetVideo) => {
+  if (!node) {
+    return;
+  }
+
   webRTC.peerMediaElements[id] = node;
 
   const video = webRTC.peerMediaElements[id];
-
-  if (!video) {
-    return;
-  }
 
   if (id === myId) {
     video.volume = 0;

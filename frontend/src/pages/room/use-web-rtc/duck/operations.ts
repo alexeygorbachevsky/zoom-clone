@@ -34,58 +34,54 @@ export const onICEShare = async ({
     return;
   }
 
-  const sessionDescription = {} as { current: RTCSessionDescription };
+  const sessionDescription = {} as { current: RTCSessionDescriptionInit };
 
   if (!webRTC.peerConnections[userId]) {
     webRTC.peerConnections[userId] = new RTCPeerConnection({
       iceServers: ICE_SERVERS,
     });
 
-    webRTC.peerConnections[userId].onicecandidate = (
-      event: RTCPeerConnectionIceEvent,
-    ) => {
-      const iceCandidate = event.candidate;
+    if (userId !== receiverId) {
+      webRTC.peerConnections[userId].onicecandidate = (
+        event: RTCPeerConnectionIceEvent,
+      ) => {
+        const iceCandidate = event.candidate;
 
-      if (iceCandidate) {
-        pusher!.send_event(
-          Events.iceCandidateShared,
-          {
-            roomId,
-            userId: currentUserId,
-            receiverId: userId,
-            iceCandidate,
-            sdp: sessionDescription.current,
-          },
-          CHANNEL,
-        );
-      }
-    };
-
-    // let tracksCount = 0;
-    webRTC.peerConnections[userId].ontrack = ({
-      streams: [remoteStream],
-    }: RTCTrackEvent) => {
-      // tracksCount += 1;
-
-      // if (tracksCount === 2) {
-      webRTC.remoteMediaStreams[userId] = remoteStream;
-      webRTC.clients[userId] = {
-        id: userId,
-        isVideo: true,
-        isAudio: true,
+        if (iceCandidate) {
+          pusher!.send_event(
+            Events.iceCandidateShared,
+            {
+              roomId,
+              userId: currentUserId,
+              receiverId: userId,
+              iceCandidate,
+              sdp: sessionDescription.current,
+            },
+            CHANNEL,
+          );
+        }
       };
-      // }
-    };
 
-    webRTC.localMediaStream?.getTracks().forEach(track => {
-      webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream);
-    });
-  }
+      // let tracksCount = 0;
+      webRTC.peerConnections[userId].ontrack = ({
+        streams: [remoteStream],
+      }: RTCTrackEvent) => {
+        // tracksCount += 1;
 
-  if (iceCandidate) {
-    webRTC.peerConnections[userId].addIceCandidate(
-      new RTCIceCandidate(iceCandidate),
-    );
+        // if (tracksCount === 2) {
+        webRTC.remoteMediaStreams[userId] = remoteStream;
+        webRTC.clients[userId] = {
+          id: userId,
+          isVideo: true,
+          isAudio: true,
+        };
+        // }
+      };
+
+      webRTC.localMediaStream?.getTracks().forEach(track => {
+        webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream!);
+      });
+    }
   }
 
   if (shouldCreateOffer) {
@@ -98,9 +94,17 @@ export const onICEShare = async ({
     return;
   }
 
-  await webRTC.peerConnections[userId].setRemoteDescription(
-    new RTCSessionDescription(sdp!),
-  );
+  if (sdp) {
+    await webRTC.peerConnections[userId].setRemoteDescription(
+      new RTCSessionDescription(sdp),
+    );
+  }
+
+  if (iceCandidate) {
+    webRTC.peerConnections[userId].addIceCandidate(
+        new RTCIceCandidate(iceCandidate),
+    );
+  }
 
   if (sdp?.type === "offer") {
     const answer = await webRTC.peerConnections[userId].createAnswer();
@@ -195,7 +199,7 @@ export const initializeVideo = async ({ roomId, userId }: InitializeVideo) => {
           roomId,
           userId: id,
           receiverId: userId,
-          shouldCreateOffer: true,
+          shouldCreateOffer: id !== userId,
         });
       }
     });

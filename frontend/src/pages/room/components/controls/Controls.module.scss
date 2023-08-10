@@ -14,10 +14,11 @@
   flex-wrap: wrap;
 
 
-  @include smaller-than-or-equal("mobileMedium") {
+  @include smaller-than-or-equal("tabletSmall") {
     padding: 0 12px;
-    height: 128px;
+    height: 164px;
     justify-content: center;
+    background-color: #2a2a2c;
   }
 
 
@@ -40,7 +41,7 @@
     justify-content: center;
     gap: 4px;
 
-    @include smaller-than-or-equal("mobileLarge") {
+    @include smaller-than-or-equal("tabletSmall") {
       padding: 0 12px;
     }
 
@@ -74,17 +75,19 @@
   }
 
   .copyButton {
+    gap: 6px;
+
     .icon {
       color: rgba(255, 255, 255, 0.5);
-      height: 20px;
-      width: 20px;
+      height: 22px;
+      width: 22px;
     }
   }
 
   .leaveRoomButton {
     margin-left: auto;
     width: 112px;
-    height: 28px;
+    height: 30px;
     cursor: pointer;
     outline: none;
     border: none;
@@ -93,10 +96,10 @@
     color: white;
     font-size: 14px;
 
-    @include smaller-than-or-equal("mobileMedium") {
+    @include smaller-than-or-equal("tabletSmall") {
       margin-left: 12px;
       height: 32px;
-      width: 100%;
+      width: 400px;
     }
 
 

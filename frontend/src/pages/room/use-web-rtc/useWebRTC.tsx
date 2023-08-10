@@ -12,7 +12,7 @@ import {
   onICEShare,
   onStopVideo,
   onUserRemove,
-} from "./duck/helpers";
+} from "./duck/operations";
 
 const useWebRTC = () => {
   const { roomId } = useParams();

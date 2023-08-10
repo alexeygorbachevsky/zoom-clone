@@ -14,6 +14,7 @@ class WebRTCStore {
   peerMediaElements: WebRTCState["peerMediaElements"] = {};
   remoteMediaStreams: WebRTCState["remoteMediaStreams"] = {};
   localMediaStream: WebRTCState["localMediaStream"] = null;
+  cameraVideoTrack: WebRTCState["cameraVideoTrack"] = null;
 
   constructor(rootStore: RootStoreType) {
     this.rootStore = rootStore;
@@ -23,6 +24,7 @@ class WebRTCStore {
       remoteMediaStreams: false,
       peerMediaElements: false,
       peerConnections: false,
+      cameraVideoTrack: false,
     });
   }
 
