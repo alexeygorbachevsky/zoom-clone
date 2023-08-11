@@ -84,6 +84,12 @@ export const onICEShare = async ({
     // }
   }
 
+  if (iceCandidate) {
+    webRTC.peerConnections[userId].addIceCandidate(
+        new RTCIceCandidate(iceCandidate),
+    );
+  }
+
   if (shouldCreateOffer) {
     const offer = await webRTC.peerConnections[userId].createOffer();
 
@@ -97,12 +103,6 @@ export const onICEShare = async ({
   if (sdp) {
     await webRTC.peerConnections[userId].setRemoteDescription(
       new RTCSessionDescription(sdp),
-    );
-  }
-
-  if (iceCandidate) {
-    webRTC.peerConnections[userId].addIceCandidate(
-      new RTCIceCandidate(iceCandidate),
     );
   }
 
