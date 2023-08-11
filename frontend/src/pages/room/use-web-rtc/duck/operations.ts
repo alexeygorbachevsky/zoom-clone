@@ -41,47 +41,47 @@ export const onICEShare = async ({
       iceServers: ICE_SERVERS,
     });
 
-    if (userId !== receiverId) {
-      webRTC.peerConnections[userId].onicecandidate = (
-        event: RTCPeerConnectionIceEvent,
-      ) => {
-        const iceCandidate = event.candidate;
+    // if (userId !== receiverId) {
+    webRTC.peerConnections[userId].onicecandidate = (
+      event: RTCPeerConnectionIceEvent,
+    ) => {
+      const iceCandidate = event.candidate;
 
-        if (iceCandidate) {
-          pusher!.send_event(
-            Events.iceCandidateShared,
-            {
-              roomId,
-              userId: currentUserId,
-              receiverId: userId,
-              iceCandidate,
-              sdp: sessionDescription.current,
-            },
-            CHANNEL,
-          );
-        }
+      if (iceCandidate) {
+        pusher!.send_event(
+          Events.iceCandidateShared,
+          {
+            roomId,
+            userId: currentUserId,
+            receiverId: userId,
+            iceCandidate,
+            sdp: sessionDescription.current,
+          },
+          CHANNEL,
+        );
+      }
+    };
+
+    // let tracksCount = 0;
+    webRTC.peerConnections[userId].ontrack = ({
+      streams: [remoteStream],
+    }: RTCTrackEvent) => {
+      // tracksCount += 1;
+
+      // if (tracksCount === 2) {
+      webRTC.remoteMediaStreams[userId] = remoteStream;
+      webRTC.clients[userId] = {
+        id: userId,
+        isVideo: true,
+        isAudio: true,
       };
+      // }
+    };
 
-      // let tracksCount = 0;
-      webRTC.peerConnections[userId].ontrack = ({
-        streams: [remoteStream],
-      }: RTCTrackEvent) => {
-        // tracksCount += 1;
-
-        // if (tracksCount === 2) {
-        webRTC.remoteMediaStreams[userId] = remoteStream;
-        webRTC.clients[userId] = {
-          id: userId,
-          isVideo: true,
-          isAudio: true,
-        };
-        // }
-      };
-
-      webRTC.localMediaStream?.getTracks().forEach(track => {
-        webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream!);
-      });
-    }
+    webRTC.localMediaStream?.getTracks().forEach(track => {
+      webRTC.peerConnections[userId].addTrack(track, webRTC.localMediaStream!);
+    });
+    // }
   }
 
   if (shouldCreateOffer) {
@@ -102,7 +102,7 @@ export const onICEShare = async ({
 
   if (iceCandidate) {
     webRTC.peerConnections[userId].addIceCandidate(
-        new RTCIceCandidate(iceCandidate),
+      new RTCIceCandidate(iceCandidate),
     );
   }
 
