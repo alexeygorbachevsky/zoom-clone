@@ -1,6 +1,6 @@
 # Zoom clone backend
 
-https://github.com/alexeygorbachevskiy/zoom-clone/assets/37103509/0c20f6ad-839e-4b4f-94c1-16417c43fa57
+https://github.com/alexeygorbachevskiy/zoom-clone/assets/37103509/18105533-6624-4c46-8061-07cc0d552e85
 
 ## Deploy
 
