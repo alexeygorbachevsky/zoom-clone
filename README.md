@@ -1,6 +1,8 @@
 # Zoom clone
 
-<video src='./frontend/src/assets/video/overview.mp4'></video> <br />
+https://github.com/alexeygorbachevskiy/zoom-clone/assets/37103509/0c20f6ad-839e-4b4f-94c1-16417c43fa57
+
+
 
 ## Deploy
 
