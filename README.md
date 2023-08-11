@@ -1,7 +1,6 @@
 # Zoom clone
 
-PUT video instead of this
-![image](./frontend/src/assets/images/chat.png)
+<video src='./frontend/src/assets/video/overview.mp4'></video> <br />
 
 ## Deploy
 
