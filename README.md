@@ -5,7 +5,7 @@ https://github.com/alexeygorbachevskiy/zoom-clone/assets/37103509/18105533-6624-
 
 ## Deploy
 
-- https://zoom-clone-frontend-alexeygorbachevskiy.vercel.app/
+- https://zoom-clone-frontend-alexeygorbachevskiys-projects.vercel.app/
 
 ## Prerequisites
 
