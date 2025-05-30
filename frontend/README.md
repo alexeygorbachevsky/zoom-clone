@@ -20,7 +20,7 @@ git clone {repository URL}
 ## Installing
 
 ```
-1. yarn install
+1. yarn install 
 2. yarn start
 3. Configure SSL certificate as described below.
 4. Create channel with name "zoom-clone" via Pusher. See https://dashboard.pusher.com/.
